@@ -1,4 +1,4 @@
-import Renderable from "./Interfaces/renderableinterface";
+import Renderable from "./Interfaces/renderable.interface";
 import Transformable from "./Interfaces/transformable.interface";
 import Shape from "./shape";
 import Type from "./type.enum";
