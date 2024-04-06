@@ -1,7 +1,7 @@
 import Shape from "2DShapes/shape";
 import Point from "Base/point";
 import Type from "2DShapes/type.enum";
-import Renderable from "2DShapes/Interfaces/renderableinterface";
+import Renderable from "Main/2D-Shapes/Interfaces/renderable.interface";
 import Transformable from "2DShapes/Interfaces/transformable.interface";
 
 class Rectangle extends Shape implements Renderable, Transformable {
