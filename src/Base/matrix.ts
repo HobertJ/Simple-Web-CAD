@@ -1,5 +1,5 @@
-import Coordinate from './coordinate';
-import Point from './point';
+import Coordinate from 'Base/coordinate';
+import Point from 'Base/point';
 
 class Matrix {
     public m1: Coordinate;
