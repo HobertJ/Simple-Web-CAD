@@ -42,13 +42,6 @@ class Line extends Shape implements Renderable, Transformable {
         return new Point([centerX, centerY], [0, 0, 0, 0]);
     }
 
-    public updatePoint(point: Point): void {
-        if (this.p2 === null) {
-            this.p2 = point;
-        } else {
-            this.p2 = point;
-        }
-    }
 
     public addPosition(gl: WebGLRenderingContext): void {
         const [p1x, p1y] = this.p1.getPair();
