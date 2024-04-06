@@ -1,6 +1,5 @@
-import Point from "../Base/point";
-import Type from "./type.enum";
-
+import Point from "Base/point";
+import Type from "2DShapes/type.enum";
 abstract class Shape {
     public id: number;
     public numberOfVertices: number;
