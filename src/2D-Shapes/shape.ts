@@ -1,12 +1,5 @@
 import Point from "../Base/point";
 
-enum Type {
-    Line,
-    Rectangle,
-    Square,
-    Polygon
-}
-
 abstract class Shape {
     public id: number;
     public numberOfVertices: number;
