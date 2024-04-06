@@ -23,6 +23,13 @@ class Line extends Shape implements Renderable, Transformable {
         super(id, 2, Type.Line);
         this.p1 = p1;
         this.p2 = null;
+        this.tx = 0;
+        this.ty = 0;
+        this.degree = 0;
+        this.sx = 1;
+        this.sy = 1;
+        this.kx = 0;
+        this.ky = 0;
     }
 
     public getCenter(): Point {
@@ -58,10 +65,12 @@ class Line extends Shape implements Renderable, Transformable {
     }
 
     public addColor(gl: WebGLRenderingContext): void {
-        const [r, g, b, a] = this.p1.getColor();
+        const [r1, g1, b1, a1] = this.p1.getColor();
+        const [r2, g2, b2, a2] = this.p2.getColor();
+
         const colors = new Float32Array([
-            r, g, b, a,
-            r, g, b, a
+            r1, g1, b1, a1,
+            r2, g2, b2, a2
         ]);
 
         const colorBuffer = gl.createBuffer();
@@ -81,7 +90,7 @@ class Line extends Shape implements Renderable, Transformable {
         return this.p2 !== null;
     }
 
-    public fixateDrawing(point: Point): void {
+    public draw(point: Point): void {
         this.p2 = point;
     }
 }
