@@ -4,3 +4,5 @@ enum Type {
     Square,
     Polygon
 }
+
+export default Type;

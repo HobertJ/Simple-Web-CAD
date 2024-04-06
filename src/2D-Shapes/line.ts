@@ -1,7 +1,7 @@
 import Renderable from "./Interfaces/renderableinterface";
 import Transformable from "./Interfaces/transformable.interface";
 import Shape from "./shape";
-import Type from "./shape/type.enum";
+import Type from "./type.enum";
 import Point from "../Base/point";
 
 class Line extends Shape implements Renderable, Transformable {

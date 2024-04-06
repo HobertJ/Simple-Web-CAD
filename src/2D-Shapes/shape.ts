@@ -1,4 +1,5 @@
 import Point from "../Base/point";
+import Type from "./type.enum";
 
 abstract class Shape {
     public id: number;
