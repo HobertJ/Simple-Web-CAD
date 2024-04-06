@@ -1,0 +1,30 @@
+{
+  "name": "tugas-besar-grafkom-1-paint",
+  "version": "1.0.0",
+  "description": "Tugas Besar 1 IF3260 Grafika Komputer",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack",
+    "start": "nodemon public/dist/index.js",
+    "dev": "webpack serve"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GAIB20/tugas-besar-grafkom-1-paint.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GAIB20/tugas-besar-grafkom-1-paint/issues"
+  },
+  "homepage": "https://github.com/GAIB20/tugas-besar-grafkom-1-paint#readme",
+  "devDependencies": {
+    "nodemon": "^3.1.0",
+    "ts-loader": "^9.5.1",
+    "typescript": "^5.4.4",
+    "webpack": "^5.91.0",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^5.0.4"
+  }
+}
