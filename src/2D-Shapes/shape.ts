@@ -13,7 +13,7 @@ abstract class Shape {
 
     public abstract getCenter(): Point;
     public abstract isDrawable(): boolean;
-    public abstract fixateDrawing(point: Point): void;
+    public abstract draw(point: Point): void;
 }
 
 export default Shape;
