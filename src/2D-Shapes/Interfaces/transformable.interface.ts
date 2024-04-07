@@ -9,6 +9,8 @@ interface Transformable {
     sy: number;
     kx: number;
     ky: number;
+    getCenter(): Point;
+    addMatrix(gl:WebGLRenderingContext, matrixLocation: WebGLUniformLocation) : void;
 }
 
 export default Transformable
