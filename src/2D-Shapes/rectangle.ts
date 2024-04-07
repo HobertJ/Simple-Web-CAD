@@ -6,10 +6,7 @@ import Transformable from "2DShapes/Interfaces/transformable.interface";
 import Transformation from "Main/Operations/Transformation";
 
 class Rectangle extends Shape implements Renderable, Transformable {
-    public p1: Point;
-    public p2: Point;
-    public p3: Point;
-    public p4: Point;
+    public arrayOfPoints: Point[];
     public center: Point;
     public tx: number;
     public ty: number;
@@ -18,10 +15,21 @@ class Rectangle extends Shape implements Renderable, Transformable {
     public sy: number;
     public kx: number;
     public ky: number;
-    
 
-    public constructor(id: number, center: Point, tx: number, ty: number, degree: number, sx: number, sy: number, kx: number, ky: number, p1: Point){
+    public constructor(
+        id: number, 
+        center: Point, 
+        tx: number, 
+        ty: number, 
+        degree: number, 
+        sx: number, 
+        sy: number, 
+        kx: number, 
+        ky: number, 
+        p1: Point
+    ){
         super(id, 4, Type.Rectangle);
+        this.arrayOfPoints = [p1, null, null, null];
         this.center = center;
         this.tx = tx;
         this.ty = ty;
@@ -30,18 +38,14 @@ class Rectangle extends Shape implements Renderable, Transformable {
         this.sy = sy;
         this.kx = kx;
         this.ky = ky;
-        this.p1 = p1;
-        this.p2 = null;
-        this.p3 = null;
-        this.p4 = null;
     }
 
     // Transformable Methods
     public getCenter(): Point {
-        const [p1x, p1y] = this.p1.getPair();
-        const [p2x, p2y] = this.p2.getPair();
-        const [p3x, p3y] = this.p3.getPair();
-        const [p4x, p4y] = this.p4.getPair();
+        const [p1x, p1y] = this.arrayOfPoints[0].getPair();
+        const [p2x, p2y] = this.arrayOfPoints[1].getPair();
+        const [p3x, p3y] = this.arrayOfPoints[2].getPair();
+        const [p4x, p4y] = this.arrayOfPoints[3].getPair();
 
         const centerX = (p1x + p2x + p3x + p4x) / 4;
         const centerY = (p1y + p2y + p3y + p4y) / 4;
@@ -72,13 +76,13 @@ class Rectangle extends Shape implements Renderable, Transformable {
     }
 
     public isDrawable(): boolean {
-        return this.p3 != null;
+        return this.arrayOfPoints[2] !== null;
     }
 
     public draw(point: Point): void {
-        this.p3 = point;
-        this.p2 = new Point([this.p1.x, this.p3.y]);
-        this.p4 = new Point([this.p3.x, this.p1.y]);
+        this.arrayOfPoints[1] = new Point([this.arrayOfPoints[0].x, point.y]);
+        this.arrayOfPoints[2] = point;
+        this.arrayOfPoints[3] = new Point([point.x, this.arrayOfPoints[0].y]);
     }
 
     public getNumberOfVerticesToBeDrawn(): number {
@@ -86,34 +90,22 @@ class Rectangle extends Shape implements Renderable, Transformable {
     }
 
     public addPosition(gl: WebGLRenderingContext): void {
-        const [p1x, p1y] = this.p1.getPair();
-        const [p2x, p2y] = this.p2.getPair();
-        const [p3x, p3y] = this.p3.getPair();
-        const [p4x, p4y] = this.p4.getPair();
+        const vertices = new Float32Array(this.arrayOfPoints.reduce((acc, point) => {
+            acc.push(...point.getPair());
+            return acc;
+        }, [] as number[]));
 
-        const vertices = new Float32Array([
-            p1x, p1y,
-            p2x, p2y,
-            p3x, p3y,
-            p4x, p4y,
-            p1x, p1y
-        ]);
         gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
     }
 
     public addColor(gl: WebGLRenderingContext): void {
-        const [r1, g1, b1, a1] = this.p1.getColor();
-        const [r2, g2, b2, a2] = this.p2.getColor();
-        const [r3, g3, b3, a3] = this.p3.getColor();
-        const [r4, g4, b4, a4] = this.p4.getColor();
+        const colors = new Float32Array(this.arrayOfPoints.reduce((acc, point) => {
+            acc.push(...point.getColor());
+            return acc;
+        }, [] as number[]));
 
-        const colors = new Float32Array([
-            r1, g1, b1, a1,
-            r2, g2, b2, a2,
-            r3, g3, b3, a3,
-            r4, g4, b4, a4,
-            r1, g1, b1, a1,
-        ]);
         gl.bufferData(gl.ARRAY_BUFFER, colors, gl.STATIC_DRAW);
     }
 }
+
+export default Rectangle;
