@@ -4,6 +4,7 @@ import Transformable from "./Interfaces/transformable.interface";
 import Shape from "./shape";
 import Type from "./type.enum";
 import Point from "Main/Base/point";
+import convexHull from "Main/Operations/convex-hull";
 
 class Polygon extends Shape implements Renderable, Transformable {
     public type: Type.Polygon;
@@ -18,12 +19,9 @@ class Polygon extends Shape implements Renderable, Transformable {
     public kx: number;
     public ky: number;
 
-    public constructor(id: number, arrayOfPoints: Point[]) {
-        super(id, arrayOfPoints.length, Type.Polygon);
-
-        this.type = Type.Polygon;
-        this.arrayOfPoints = arrayOfPoints;
-
+    public constructor(id: number, point: Point) {
+        super(id, 1, Type.Polygon);
+        this.arrayOfPoints = new Array(point);
         this.tx = 0;
         this.ty = 0;
         this.degree = 0;
@@ -55,7 +53,7 @@ class Polygon extends Shape implements Renderable, Transformable {
     }
 
     public draw (point: Point): void {
-        this.arrayOfPoints.push(point);
+        this.arrayOfPoints = convexHull([...this.arrayOfPoints, point]);
     }
 
     public drawMethod(gl: WebGLRenderingContext): number {
@@ -117,6 +115,29 @@ class Polygon extends Shape implements Renderable, Transformable {
       
           gl.uniformMatrix3fv(matrixLocation, false, matrix);
     }
+
+    public deletePoint(index: number) {
+        var newPoints: Point[] = [this.arrayOfPoints[index]];
+        for (let i = 0; i < this.arrayOfPoints.length; i++) {
+          if (i != index) {
+            newPoints.push(this.arrayOfPoints[i]);
+          }
+        }
+    
+        this.arrayOfPoints = newPoints.slice(1, this.arrayOfPoints.length);
+    
+        // after delete, need to setup option again
+        const pointPicker = document.getElementById("pointPicker");
+        pointPicker.innerHTML = "";
+        pointPicker.replaceChildren();
+        /* All Point */
+        for (let i = 0; i < this.arrayOfPoints.length; i++) {
+          const newPoint = document.createElement("option");
+          newPoint.value = i.toString();
+          newPoint.text = "point_" + i;
+          pointPicker.appendChild(newPoint);
+        }
+      }
     
 }
 

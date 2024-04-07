@@ -72,3 +72,24 @@ h2 {
 .slider{
     width: 150px;
 }
+
+#pointPicker {
+    margin-top: 20px;
+}
+
+.bottom-section {
+    display: flex;
+}
+
+#dropdown-point{
+    margin-top: 20px;
+    margin-bottom: 20px;
+    width: 250px;
+}
+
+#colorPicker{
+    margin-left: 5px;
+    margin-top: 20px;
+    height: 37px;
+    width: 40px;
+}

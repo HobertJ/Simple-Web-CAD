@@ -97,19 +97,44 @@
             </div>
 
             <h4>Move X</h4>
-            <input type="range" min="0" max="100" value="50" class="slider">
+            <input type="range" min="0" max="100" value="50" class="slider" id="sliderX">
             <h4>Move Y</h4>
-            <input type="range" min="0" max="100" value="50" class="slider">
+            <input type="range" min="0" max="100" value="50" class="slider" id="sliderY">
             <h4>Slider Length</h4>
-            <input type="range" min="0" max="100" value="50" class="slider">
+            <input type="range" min="0" max="100" value="50" class="slider" id="sliderLength">
             <h4>Slider Width</h4>
-            <input type="range" min="0" max="100" value="50" class="slider">
+            <input type="range" min="0" max="100" value="50" class="slider" id="sliderWidth">
             <h4>Slider Rotation</h4>
             <div class="slider-container">
-                <input type="range" min="0" max="100" value="50" class="slider">
+                <input type="range" min="0" max="100" value="50" class="slider" id="sliderRotation">
                 <span id="slider-value">50</span>
-              </div>     
-        <!-- Modal -->
+            </div>
+        
+        <div class="bottom-section">
+        <div class="btn-group">
+            <button class="btn btn-primary btn-md" id="dropdown-point" type="button">
+              Small split button
+            </button>
+            <button type="button" class="btn btn-md btn-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false" id="pointPicker">
+              <span class="visually-hidden">Toggle Dropdown</span>
+            </button>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#" onclick=changeButtonText(this)>Action</a></li>
+                <li><a class="dropdown-item" href="#" onclick=changeButtonText(this)>Another action</a></li>
+                <li><a class="dropdown-item" href="#" onclick=changeButtonText(this)>Something else here</a></li>
+                <li><a class="dropdown-item" href="#" onclick=changeButtonText(this)>Action</a></li>
+                <li><a class="dropdown-item" href="#" onclick=changeButtonText(this)>Another action</a></li>
+                <li><a class="dropdown-item" href="#" onclick=changeButtonText(this)>Something else here</a></li>
+                <li><a class="dropdown-item" href="#" onclick=changeButtonText(this)>Action</a></li>
+                <li><a class="dropdown-item" href="#" onclick=changeButtonText(this)>Another action</a></li>
+                <li><a class="dropdown-item" href="#" onclick=changeButtonText(this)>Something else here</a></li>
+            </ul>
+          </div>
+
+          <input type="color" id="colorPicker" name="colorPicker" value="#ff0000">
+        </div>
+
+          <!-- Modal -->
         <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -126,7 +151,6 @@
                 </div>
             </div>
         </div>
-    
 
         </div>
 

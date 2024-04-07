@@ -16,28 +16,16 @@ class Rectangle extends Shape implements Renderable, Transformable {
     public kx: number;
     public ky: number;
 
-    public constructor(
-        id: number, 
-        center: Point, 
-        tx: number, 
-        ty: number, 
-        degree: number, 
-        sx: number, 
-        sy: number, 
-        kx: number, 
-        ky: number, 
-        p1: Point
-    ){
+    public constructor(id: number,  p1: Point){
         super(id, 4, Type.Rectangle);
         this.arrayOfPoints = [p1, null, null, null];
-        this.center = center;
-        this.tx = tx;
-        this.ty = ty;
-        this.degree = degree;
-        this.sx = sx;
-        this.sy = sy;
-        this.kx = kx;
-        this.ky = ky;
+        this.tx = 0;
+        this.ty = 0;
+        this.degree = 0;
+        this.sx = 1;
+        this.sy = 1;
+        this.kx = 0;
+        this.ky = 0;
     }
 
     // Transformable Methods
