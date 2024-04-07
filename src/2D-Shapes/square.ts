@@ -5,23 +5,21 @@ import Transformable from "./Interfaces/transformable.interface";
 import Point from "../Base/point";
 import Type from "./type.enum";
 
-class Square extends Shape implements Renderable, Transformable{
+class Square extends Shape implements Renderable, Transformable {
     public center: Point;
-    public p1: Point;
-    public p2: Point;
-    public p3: Point;
-    public p4: Point;
+    public arrayOfPoints: Point[];
     public tx: number;
     public ty: number;
     public degree: number;
     public sx: number;
     public sy: number;
     public kx: number;
-    public ky: number;    
+    public ky: number;
 
     public constructor(id: number, centerPoint: Point) {
         super(id, 4, Type.Square);
         this.center = centerPoint;
+        this.arrayOfPoints = [];
         this.tx = 0;
         this.ty = 0;
         this.degree = 0;
@@ -32,9 +30,10 @@ class Square extends Shape implements Renderable, Transformable{
     }
 
     // Transformable Methods
-    public getCenter() : Point{
+    public getCenter(): Point {
         return this.center;
     }
+    
     public addMatrix(gl: WebGLRenderingContext, matrixLocation: WebGLUniformLocation): void {
         const matrix = Transformation.transformationMatrix(
             gl.canvas.width,
@@ -47,9 +46,9 @@ class Square extends Shape implements Renderable, Transformable{
             this.kx,
             this.ky,
             this.center
-          ).flatten();
-      
-          gl.uniformMatrix3fv(matrixLocation, false, matrix);
+        ).flatten();
+
+        gl.uniformMatrix3fv(matrixLocation, false, matrix);
     }
 
     // Renderable Methods
@@ -58,58 +57,45 @@ class Square extends Shape implements Renderable, Transformable{
     }
 
     public isDrawable(): boolean {
-        return this.p1 != null;
+        return this.arrayOfPoints.length === 4;
     }
 
     public draw(p1: Point): void {
-        this.p1 = p1;
-        this.p2 = Transformation.translation(this.center.getX(), this.center.getY())
-                    .multiplyMatrix(Transformation.rotation(0.5 * Math.PI))
-                    .multiplyMatrix(Transformation.translation(-this.center.getX(), -this.center.getY()))
-                    .multiplyPoint(this.p1);
-        this.p3 = Transformation.translation(this.center.getX(), this.center.getY())
-                    .multiplyMatrix(Transformation.rotation(Math.PI))
-                    .multiplyMatrix(Transformation.translation(-this.center.getX(), -this.center.getY()))
-                    .multiplyPoint(this.p1);
-        this.p4 = Transformation.translation(this.center.getX(), this.center.getY())
-                    .multiplyMatrix(Transformation.rotation(1.5 * Math.PI))
-                    .multiplyMatrix(Transformation.translation(-this.center.getX(), -this.center.getY()))
-                    .multiplyPoint(this.p1);
+        this.arrayOfPoints.push(p1);
+
+        if (this.arrayOfPoints.length === 1) {
+            for (let i = 1; i <= 3; i++) {
+                const angle = (i * Math.PI) / 2;
+                const rotationMatrix = Transformation.translation(this.center.getX(), this.center.getY())
+                    .multiplyMatrix(Transformation.rotation(angle))
+                    .multiplyMatrix(Transformation.translation(-this.center.getX(), -this.center.getY()));
+                const rotatedPoint = rotationMatrix.multiplyPoint(p1);
+                this.arrayOfPoints.push(rotatedPoint);
+            }
+        }
     }
 
     public getNumberOfVerticesToBeDrawn(): number {
-        return 5;
+        return this.arrayOfPoints.length;
     }
 
     public addPosition(gl: WebGLRenderingContext): void {
-        const [p1x, p1y] = this.p1.getPair();
-        const [p2x, p2y] = this.p2.getPair();
-        const [p3x, p3y] = this.p3.getPair();
-        const [p4x, p4y] = this.p4.getPair();
+        const vertices = new Float32Array(this.arrayOfPoints.reduce((acc, point) => {
+            acc.push(...point.getPair());
+            return acc;
+        }, [] as number[]));
 
-        const vertices = new Float32Array([
-            p1x, p1y,
-            p2x, p2y,
-            p3x, p3y,
-            p4x, p4y,
-            p1x, p1y
-        ]);
         gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
     }
 
     public addColor(gl: WebGLRenderingContext): void {
-        const [r1, g1, b1, a1] = this.p1.getColor();
-        const [r2, g2, b2, a2] = this.p2.getColor();
-        const [r3, g3, b3, a3] = this.p3.getColor();
-        const [r4, g4, b4, a4] = this.p4.getColor();
+        const colors = new Float32Array(this.arrayOfPoints.reduce((acc, point) => {
+            acc.push(...point.getColor());
+            return acc;
+        }, [] as number[]));
 
-        const colors = new Float32Array([
-            r1, g1, b1, a1,
-            r2, g2, b2, a2,
-            r3, g3, b3, a3,
-            r4, g4, b4, a4,
-            r1, g1, b1, a1,
-        ]);
         gl.bufferData(gl.ARRAY_BUFFER, colors, gl.STATIC_DRAW);
     }
 }
+
+export default Square;
