@@ -1,3 +1,4 @@
+import Transformation from "Main/Operations/Transformation";
 import Renderable from "./Interfaces/renderable.interface";
 import Transformable from "./Interfaces/transformable.interface";
 import Shape from "./shape";
@@ -61,8 +62,8 @@ class Polygon extends Shape implements Renderable, Transformable {
         return this.isDrawable() ? gl.TRIANGLE_FAN : gl.LINES;
     }
 
-    public getNumberOfVertices(): number {
-        return this.numberOfVertices;
+    public getNumberOfVerticesToBeDrawn(): number {
+        return this.arrayOfPoints.length + 1;
     }
 
     public addPosition(gl: WebGLRenderingContext): void {
@@ -78,8 +79,6 @@ class Polygon extends Shape implements Renderable, Transformable {
         vertices[this.arrayOfPoints.length * 2] = pInitialX;
         vertices[this.arrayOfPoints.length * 2 + 1] = pInitialY;
 
-        const positionBuffer = gl.createBuffer();
-        gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
         gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
     }
 
@@ -100,9 +99,23 @@ class Polygon extends Shape implements Renderable, Transformable {
         colors[this.arrayOfPoints.length * 4 + 2] = bInitial;
         colors[this.arrayOfPoints.length * 4 + 3] = aInitial;
 
-        const colorBuffer = gl.createBuffer();
-        gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
         gl.bufferData(gl.ARRAY_BUFFER, colors, gl.STATIC_DRAW);
+    }
+    public addMatrix(gl: WebGLRenderingContext, matrixLocation: WebGLUniformLocation): void {
+        const matrix = Transformation.transformationMatrix(
+            gl.canvas.width,
+            gl.canvas.height,
+            this.tx,
+            this.ty,
+            this.degree,
+            this.sx,
+            this.sy,
+            this.kx,
+            this.ky,
+            this.center
+          ).flatten();
+      
+          gl.uniformMatrix3fv(matrixLocation, false, matrix);
     }
     
 }

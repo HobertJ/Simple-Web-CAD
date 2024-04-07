@@ -3,6 +3,7 @@ import Transformable from "./Interfaces/transformable.interface";
 import Shape from "./shape";
 import Type from "./type.enum";
 import Point from "../Base/point";
+import Transformation from "Main/Operations/Transformation";
 
 class Line extends Shape implements Renderable, Transformable {
 
@@ -32,6 +33,24 @@ class Line extends Shape implements Renderable, Transformable {
         this.ky = 0;
     }
 
+    // Transformable Methods
+    public addMatrix(gl: WebGLRenderingContext, matrixLocation: WebGLUniformLocation): void {
+        const matrix = Transformation.transformationMatrix(
+            gl.canvas.width,
+            gl.canvas.height,
+            this.tx,
+            this.ty,
+            this.degree,
+            this.sx,
+            this.sy,
+            this.kx,
+            this.ky,
+            this.center
+          ).flatten();
+      
+          gl.uniformMatrix3fv(matrixLocation, false, matrix);
+    }
+
     public getCenter(): Point {
         const [p1x, p1y] = this.p1.getPair();
         const [p2x, p2y] = this.p2.getPair();
@@ -42,7 +61,23 @@ class Line extends Shape implements Renderable, Transformable {
         return new Point([centerX, centerY], [0, 0, 0, 0]);
     }
 
+    // Renderable Methods
+    public drawMethod(gl: WebGLRenderingContext): number {
+        return gl.LINES;
+    }
 
+    public isDrawable(): boolean {
+        return this.p2 !== null;
+    }
+
+    public draw(point: Point): void {
+        this.p2 = point;
+    }
+
+    public getNumberOfVerticesToBeDrawn(): number {
+        return 2;
+    } 
+    
     public addPosition(gl: WebGLRenderingContext): void {
         const [p1x, p1y] = this.p1.getPair();
         const [p2x, p2y] = this.p2.getPair();
@@ -52,8 +87,6 @@ class Line extends Shape implements Renderable, Transformable {
             p2x, p2y
         ]);
 
-        const positionBuffer = gl.createBuffer();
-        gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
         gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
     }
 
@@ -66,26 +99,8 @@ class Line extends Shape implements Renderable, Transformable {
             r2, g2, b2, a2
         ]);
 
-        const colorBuffer = gl.createBuffer();
-        gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
         gl.bufferData(gl.ARRAY_BUFFER, colors, gl.STATIC_DRAW);
-    }
-    
-    public drawMethod(gl: WebGLRenderingContext): number {
-        return gl.LINES;
-    }
-
-    public getNumberOfVertices(): number {
-        return this.numberOfVertices;
-    }
-
-    public isDrawable(): boolean {
-        return this.p2 !== null;
-    }
-
-    public draw(point: Point): void {
-        this.p2 = point;
-    }
+    }  
 }
 
 export default Line;

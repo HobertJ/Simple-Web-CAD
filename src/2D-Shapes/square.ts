@@ -31,8 +31,30 @@ class Square extends Shape implements Renderable, Transformable{
         this.ky = 0;
     }
 
+    // Transformable Methods
     public getCenter() : Point{
         return this.center;
+    }
+    public addMatrix(gl: WebGLRenderingContext, matrixLocation: WebGLUniformLocation): void {
+        const matrix = Transformation.transformationMatrix(
+            gl.canvas.width,
+            gl.canvas.height,
+            this.tx,
+            this.ty,
+            this.degree,
+            this.sx,
+            this.sy,
+            this.kx,
+            this.ky,
+            this.center
+          ).flatten();
+      
+          gl.uniformMatrix3fv(matrixLocation, false, matrix);
+    }
+
+    // Renderable Methods
+    public drawMethod(gl: WebGLRenderingContext): number {
+        return gl.TRIANGLE_FAN;
     }
 
     public isDrawable(): boolean {
@@ -55,43 +77,24 @@ class Square extends Shape implements Renderable, Transformable{
                     .multiplyPoint(this.p1);
     }
 
-    // renderable methods
-    public drawMethod(gl: WebGLRenderingContext): number {
-        return gl.TRIANGLE_FAN;
-    }
-    public getNumberOfVertices(): number {
-        return this.numberOfVertices;
+    public getNumberOfVerticesToBeDrawn(): number {
+        return 5;
     }
 
     public addPosition(gl: WebGLRenderingContext): void {
-        gl.bufferData(
-            gl.ARRAY_BUFFER,
-            new Float32Array([
-              ...this.p1.getPair(),
-              ...this.p2.getPair(),
-              ...this.p3.getPair(),
-              ...this.p4.getPair(),
-              ...this.p1.getPair(),
-            ]),
-            gl.STATIC_DRAW
-          );
+        const [p1x, p1y] = this.p1.getPair();
+        const [p2x, p2y] = this.p2.getPair();
+        const [p3x, p3y] = this.p3.getPair();
+        const [p4x, p4y] = this.p4.getPair();
 
-          const [p1x, p1y] = this.p1.getPair();
-          const [p2x, p2y] = this.p2.getPair();
-          const [p3x, p3y] = this.p3.getPair();
-          const [p4x, p4y] = this.p4.getPair();
-  
-          const vertices = new Float32Array([
-              p1x, p1y,
-              p2x, p2y,
-              p3x, p3y,
-              p4x, p4y,
-              p1x, p1y
-          ]);
-  
-          const positionBuffer = gl.createBuffer();
-          gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-          gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
+        const vertices = new Float32Array([
+            p1x, p1y,
+            p2x, p2y,
+            p3x, p3y,
+            p4x, p4y,
+            p1x, p1y
+        ]);
+        gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
     }
 
     public addColor(gl: WebGLRenderingContext): void {
@@ -100,7 +103,6 @@ class Square extends Shape implements Renderable, Transformable{
         const [r3, g3, b3, a3] = this.p3.getColor();
         const [r4, g4, b4, a4] = this.p4.getColor();
 
-
         const colors = new Float32Array([
             r1, g1, b1, a1,
             r2, g2, b2, a2,
@@ -108,8 +110,6 @@ class Square extends Shape implements Renderable, Transformable{
             r4, g4, b4, a4,
             r1, g1, b1, a1,
         ]);
-        const colorBuffer = gl.createBuffer();
-        gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
         gl.bufferData(gl.ARRAY_BUFFER, colors, gl.STATIC_DRAW);
     }
 }
