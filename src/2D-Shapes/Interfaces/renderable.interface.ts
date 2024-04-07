@@ -1,11 +1,12 @@
 import Point from "../../Base/point";
 
 interface Renderable {
-    // renderable method
     drawMethod(gl: WebGLRenderingContext): number;
-    getNumberOfVertices(): number;
+    isDrawable(): boolean;
+    getNumberOfVerticesToBeDrawn(): number;
     addPosition(gl: WebGLRenderingContext): void;
     addColor(gl: WebGLRenderingContext): void;
+    addMatrix(gl:WebGLRenderingContext, matrixLocation: WebGLUniformLocation) : void;
 }
 
 export default Renderable
