@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./styles/index.css">
+    <script type="text/javascript" src="./dist/index.js" defer></script>
+    <link href="./../node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="./../node_modules/jquery/dist/jquery.slim.min.js"></script>
+    <script src="./../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Reddit+Mono:wght@200..900&display=swap" rel="stylesheet">
+    <script type="notjs" id="vertex-shader">
+        attribute vec4 aVertexPosition;
+        uniform mat4 uModelViewMatrix;
+        uniform mat4 uProjectionMatrix;
+        
+        void main() {
+        gl_Position = uProjectionMatrix * uModelViewMatrix * aVertexPosition;
+        }
+    </script>
+
+    <script type="notjs" id="fragment-shader">
+        precision mediump float;
+
+        varying vec4 v_color;
+
+        void main() {
+            gl_FragColor = v_color;
+        }
+    </script>
+    <title>paint</title>
+
+    <script>
+        // Function to change button text based on selected dropdown item
+        function changeButtonText(element) {
+            // Get the text of the selected item
+            console.log(element);
+            var selectedItemText = element.innerHTML;
+            console.log(selectedItemText);
+            
+            // Set the text of the dropdown button to the selected item text
+            document.getElementById("dropdown").innerHTML = selectedItemText;
+        }
+    </script>
+
+</head>
+<body>
+    <div id="root">
+        <div class="left-panel">
+            <div class="title">
+                <h1>Paint In My Ass</h1>
+            </div>
+            <div class="create-section">
+                <h2>Create Shape</h2>
+                <div calss="button-section">
+                    <div class="lane1">
+                        <button class="btn btn-primary btn-shape" id="line-btn">Line</button>
+                        <button class="btn btn-primary btn-shape" id="square-btn">Square</button>
+                    </div>
+                    <div class="lane2">
+                        <button class="btn btn-primary btn-shape" id="rectangle-btn">Rectangle</button>
+                        <button class="btn btn-primary btn-shape" id="polygon-btn">Polygon</button>
+                    </div>
+                </div>
+                <h2>Tools</h2>
+                <button class="btn btn-primary btn-tools" id="save-btn">Save</button>
+                <button class="btn btn-primary btn-tools" id="load-btn">Load</button>
+                <button type="button" class="btn btn-primary btn-tools" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                    Help
+                </button>
+            </div>
+            
+            <div class="shape-section">
+                <h2>List of Shapes</h2>
+                <div class="btn-group">
+                    <button class="btn btn-primary btn-md" id="dropdown" type="button">
+                      Small split button
+                    </button>
+                    <button type="button" class="btn btn-md btn-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+                      <span class="visually-hidden">Toggle Dropdown</span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#" onclick=changeButtonText(this)>Action</a></li>
+                        <li><a class="dropdown-item" href="#" onclick=changeButtonText(this)>Another action</a></li>
+                        <li><a class="dropdown-item" href="#" onclick=changeButtonText(this)>Something else here</a></li>
+                        <li><a class="dropdown-item" href="#" onclick=changeButtonText(this)>Action</a></li>
+                        <li><a class="dropdown-item" href="#" onclick=changeButtonText(this)>Another action</a></li>
+                        <li><a class="dropdown-item" href="#" onclick=changeButtonText(this)>Something else here</a></li>
+                        <li><a class="dropdown-item" href="#" onclick=changeButtonText(this)>Action</a></li>
+                        <li><a class="dropdown-item" href="#" onclick=changeButtonText(this)>Another action</a></li>
+                        <li><a class="dropdown-item" href="#" onclick=changeButtonText(this)>Something else here</a></li>
+                    </ul>
+                  </div>
+                <div id="selector"></div>
+            </div>
+
+            <h4>Move X</h4>
+            <input type="range" min="0" max="100" value="50" class="slider">
+            <h4>Move Y</h4>
+            <input type="range" min="0" max="100" value="50" class="slider">
+            <h4>Slider Length</h4>
+            <input type="range" min="0" max="100" value="50" class="slider">
+            <h4>Slider Width</h4>
+            <input type="range" min="0" max="100" value="50" class="slider">
+            <h4>Slider Rotation</h4>
+            <div class="slider-container">
+                <input type="range" min="0" max="100" value="50" class="slider">
+                <span id="slider-value">50</span>
+              </div>     
+        <!-- Modal -->
+        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Quick Guide</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                    <p>tolong kami Tuhan</p>
+                    </div>
+                    <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+
+        </div>
+
+        <canvas id="canvas"></canvas>
+
+    </div>
+</body>
+</html>
