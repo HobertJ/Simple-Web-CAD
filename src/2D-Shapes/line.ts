@@ -8,8 +8,7 @@ import Transformation from "Main/Operations/Transformation";
 class Line extends Shape implements Renderable, Transformable {
 
     public type: Type.Line;
-    public p1: Point;
-    public p2: Point;
+    public arrayOfPoints: Point[];
 
     public center: Point;
     public tx: number;
@@ -22,8 +21,7 @@ class Line extends Shape implements Renderable, Transformable {
 
     public constructor(id: number, p1: Point) {
         super(id, 2, Type.Line);
-        this.p1 = p1;
-        this.p2 = null;
+        this.arrayOfPoints = [p1];
         this.tx = 0;
         this.ty = 0;
         this.degree = 0;
@@ -52,52 +50,50 @@ class Line extends Shape implements Renderable, Transformable {
     }
 
     public getCenter(): Point {
-        const [p1x, p1y] = this.p1.getPair();
-        const [p2x, p2y] = this.p2.getPair();
-
-        const centerX = (p1x + p2x) / 2;
-        const centerY = (p1y + p2y) / 2;
+        const numPoints = this.arrayOfPoints.length;
+        let centerX = 0;
+        let centerY = 0;
+        for (const point of this.arrayOfPoints) {
+            const [x, y] = point.getPair();
+            centerX += x;
+            centerY += y;
+        }
+        centerX /= numPoints;
+        centerY /= numPoints;
 
         return new Point([centerX, centerY], [0, 0, 0, 0]);
     }
 
-    // Renderable Methods
     public drawMethod(gl: WebGLRenderingContext): number {
         return gl.LINES;
     }
 
     public isDrawable(): boolean {
-        return this.p2 !== null;
+        return this.arrayOfPoints.length === 2;
     }
 
     public draw(point: Point): void {
-        this.p2 = point;
+        this.arrayOfPoints.push(point);
     }
 
     public getNumberOfVerticesToBeDrawn(): number {
-        return 2;
+        return this.arrayOfPoints.length;
     } 
     
     public addPosition(gl: WebGLRenderingContext): void {
-        const [p1x, p1y] = this.p1.getPair();
-        const [p2x, p2y] = this.p2.getPair();
-
-        const vertices = new Float32Array([
-            p1x, p1y,
-            p2x, p2y
-        ]);
+        const vertices = new Float32Array(this.arrayOfPoints.reduce((acc, point) => {
+            acc.push(...point.getPair());
+            return acc;
+        }, [] as number[]));
 
         gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
     }
 
     public addColor(gl: WebGLRenderingContext): void {
-        const [r1, g1, b1, a1] = this.p1.getColor();
-        const [r2, g2, b2, a2] = this.p2.getColor();
-
-        const colors = new Float32Array([
-            r1, g1, b1, a1,
-            r2, g2, b2, a2
-        ]);
+        const colors = new Float32Array(this.arrayOfPoints.reduce((acc, point) => {
+            acc.push(...point.getColor());
+            return acc;
+        }, [] as number[]));
 
         gl.bufferData(gl.ARRAY_BUFFER, colors, gl.STATIC_DRAW);
     }  
