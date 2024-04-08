@@ -127,106 +127,137 @@ polygonBtn.addEventListener("click", () => {
     // isFirstDrawing = true;
 });
 
-
+  // const saveBtn = document.getElementById("save-btn");
+  // saveBtn.addEventListener("click", () => {
+  //     FileHandling.download(FileSystem.serialize(objects));
+  // });
   
-    // const saveBtn = document.getElementById("save-btn");
-    // saveBtn.addEventListener("click", () => {
-    //     FileHandling.download(FileSystem.serialize(objects));
-    // });
-    
-    // const uploadBtn = document.getElementById("load-btn");
-    // uploadBtn.addEventListener("click", () => {
-    //     FileHandling.upload((text) => {
-    //     objects = FileSystem.load(text);
-    
-    //     for (const object of objects) {
-    //         object.setupOption(true);
-    //     }
-    
-    //     renderCanvas();
-    //     });
-    // });
+  // const uploadBtn = document.getElementById("load-btn");
+  // uploadBtn.addEventListener("click", () => {
+  //     FileHandling.upload((text) => {
+  //     objects = FileSystem.load(text);
+  
+  //     for (const object of objects) {
+  //         object.setupOption(true);
+  //     }
+  
+  //     renderCanvas();
+  //     });
+  // });
+
+
+let currentObject: (Shape&Renderable&Transformable);
 /* Canvas Listener */
 canvas.addEventListener("mousedown", (event) => {
     const x = event.clientX;
     const y = event.clientY;
-    const point = new Point([x, y]);
-  
-    switch (type) {
-      case Type.Line:
-        if (!isDrawing) {
-          const line = new Line(shapes.length, point);
-          shapes.push(line);
-  
-          isDrawing = true;
+    const point = new Point([x, y])
+
+    if (isDrawing) {
+      if (currentObject.type !== Type.Polygon){
+        shapes.push(currentObject);
+        isDrawing = false;
+        currentObject = null;
+      } else {
+        currentObject.draw(point);
+        if (currentObject.id == shapes.length) { // belum dipush ke shapes
+          if (currentObject.isDrawable()){
+            shapes.push(currentObject);
+            isDrawing = false;
+          } 
         } else {
-          const line = shapes[shapes.length - 1] as Line;
-          line.draw(point);
-          render(gl, programInfo, line);
-          setupOption(true, line);
-  
           isDrawing = false;
         }
-        break;
-  
-      case Type.Square:
-        if (!isDrawing) {
-          const square = new Square(shapes.length, point);
-          shapes.push(square);
-  
-          isDrawing = true;
-        } else {
-          const square = shapes[shapes.length - 1] as Square;
-          square.draw(point);
-          render(gl, programInfo, square);
-          setupOption(true, square);
-  
-          isDrawing = false;
-        }
-        break;
-  
-      case Type.Rectangle:
-        if (!isDrawing) {
-          const rectangle = new Rectangle(shapes.length, point);
-          shapes.push(rectangle);
-  
-          isDrawing = true;
-        } else {
-          const rectangle =shapes[shapes.length - 1] as Rectangle;
-  
-          rectangle.draw(point);
-          render(gl, programInfo, rectangle);
-          setupOption(true, rectangle);
-  
-          isDrawing = false;
-        }
-        break;
-  
-      case Type.Polygon:
-        if (!isDrawing) {
-          const polygon = new Polygon(shapes.length, point);
-          shapes.push(polygon);
-  
-          isDrawing = true;
-        } else {
-          const polygon = shapes[shapes.length - 1] as Polygon;
-  
-          polygon.draw(point);
-          render(gl, programInfo, polygon);
-          setupOption(isFirstDrawing, polygon);
-  
-          isFirstDrawing = false;
-        }
-        break;
-  
-      case Type.POLYGON_REDRAW:
-        const polygon = objects[polygonRedrawIndex] as Polygon;
-  
-        polygon.updatePoint(point);
-        polygon.render(gl, program, positionBuffer, colorBuffer);
-  
-        break;
+      }
+
+    } else {
+      switch (type) {
+        case Type.Line:
+          currentObject = new Line(shapes.length, point);
+        case Type.Square:
+          currentObject = new Square(shapes.length, point);
+        case Type.Rectangle:
+          currentObject = new Rectangle(shapes.length, point);
+        case Type.Polygon:
+          currentObject = new Polygon(shapes.length, point);
+      }
     }
+  
+  //   switch (type) {
+  //     case Type.Line:
+  //       if (!isDrawing) {
+  //         const line = new Line(shapes.length, point);
+  //         shapes.push(line);
+  
+  //         isDrawing = true;
+  //       } else {
+  //         const line = shapes[shapes.length - 1] as Line;
+  //         line.draw(point);
+  //         render(gl, programInfo, line);
+  //         setupOption(true, line);
+  
+  //         isDrawing = false;
+  //       }
+  //       break;
+  
+  //     case Type.Square:
+  //       if (!isDrawing) {
+  //         const square = new Square(shapes.length, point);
+  //         shapes.push(square);
+  
+  //         isDrawing = true;
+  //       } else {
+  //         const square = shapes[shapes.length - 1] as Square;
+  //         square.draw(point);
+  //         render(gl, programInfo, square);
+  //         setupOption(true, square);
+  
+  //         isDrawing = false;
+  //       }
+  //       break;
+  
+  //     case Type.Rectangle:
+  //       if (!isDrawing) {
+  //         const rectangle = new Rectangle(shapes.length, point);
+  //         shapes.push(rectangle);
+  
+  //         isDrawing = true;
+  //       } else {
+  //         const rectangle =shapes[shapes.length - 1] as Rectangle;
+  
+  //         rectangle.draw(point);
+  //         render(gl, programInfo, rectangle);
+  //         setupOption(true, rectangle);
+  
+  //         isDrawing = false;
+  //       }
+  //       break;
+  
+  //     case Type.Polygon:
+  //       if (!isDrawing) {
+  //         const polygon = new Polygon(shapes.length, point);
+  //         shapes.push(polygon);
+  
+  //         isDrawing = true;
+  //       } else {
+  //         const polygon = shapes[shapes.length - 1] as Polygon;
+  
+  //         polygon.draw(point);
+  //         render(gl, programInfo, polygon);
+  //         setupOption(isFirstDrawing, polygon);
+  
+  //         isFirstDrawing = false;
+  //       }
+  //       break;
+  
+  //     case Type.POLYGON_REDRAW:
+  //       // const polygon = objects[polygonRedrawIndex] as Polygon;
+  
+  //       // polygon.updatePoint(point);
+  //       // polygon.render(gl, program, positionBuffer, colorBuffer);
+  
+  //       // break;
+  //   }
   });
   
   canvas.addEventListener("mousemove", (event) => {
@@ -235,32 +266,37 @@ canvas.addEventListener("mousedown", (event) => {
     const point = new Point([x, y]);
   
     if (isDrawing) {
-      switch (type) {
-        case Type.Line:
-          const line = shapes[shapes.length - 1] as Line;
-          line.draw(point);
-          render(gl, programInfo, line);
-          break;
+      if (currentObject.type !== Type.Polygon){
+        currentObject.draw(point);
+        renderAll(gl, programInfo, shapes);
+        render(gl, programInfo, currentObject);  
+      }   
+      // switch (type) {
+      //   case Type.Line:
+      //     const line = shapes[shapes.length - 1] as Line;
+      //     line.draw(point);
+      //     render(gl, programInfo, line);
+      //     break;
   
-        case Type.Square:
-          const square = shapes[shapes.length - 1] as Square;
-          square.draw(point);
-          render(gl, programInfo, square);
-          break;
+      //   case Type.Square:
+      //     const square = shapes[shapes.length - 1] as Square;
+      //     square.draw(point);
+      //     render(gl, programInfo, square);
+      //     break;
   
-        case Type.Rectangle:
-          const rectangle = shapes[shapes.length - 1] as Rectangle;
-          rectangle.draw(point);
-          render(gl, programInfo, rectangle);
-          break;
+      //   case Type.Rectangle:
+      //     const rectangle = shapes[shapes.length - 1] as Rectangle;
+      //     rectangle.draw(point);
+      //     render(gl, programInfo, rectangle);
+      //     break;
   
-        case Type.Polygon:
-          /* Do Nothing */
-          break;
+      //   case Type.Polygon:
+      //     /* Do Nothing */
+      //     break;
   
-        default:
-          throw new Error("Shape type is not defined");
-      }
+      //   default:
+      //     throw new Error("Shape type is not defined");
+      // }
     }
   });
     // =========================================================
