@@ -61,7 +61,7 @@ class Square extends Shape implements Renderable, Transformable {
     }
 
     public draw(p1: Point): void {
-        this.arrayOfPoints.push(p1);
+        this.arrayOfPoints[0] = p1;
 
         if (this.arrayOfPoints.length === 1) {
             for (let i = 1; i <= 3; i++) {
@@ -70,7 +70,7 @@ class Square extends Shape implements Renderable, Transformable {
                     .multiplyMatrix(Transformation.rotation(angle))
                     .multiplyMatrix(Transformation.translation(-this.center.getX(), -this.center.getY()));
                 const rotatedPoint = rotationMatrix.multiplyPoint(p1);
-                this.arrayOfPoints.push(rotatedPoint);
+                this.arrayOfPoints[i] = rotatedPoint;
             }
         }
     }

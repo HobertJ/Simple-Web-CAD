@@ -73,7 +73,7 @@ class Line extends Shape implements Renderable, Transformable {
     }
 
     public draw(point: Point): void {
-        this.arrayOfPoints.push(point);
+        this.arrayOfPoints[1] = point;
     }
 
     public getNumberOfVerticesToBeDrawn(): number {
