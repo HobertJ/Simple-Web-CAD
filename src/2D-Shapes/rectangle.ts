@@ -1,8 +1,8 @@
-import Shape from "2DShapes/shape";
+import Shape from "Shapes/shape";
 import Point from "Base/point";
-import Type from "2DShapes/type.enum";
+import Type from "Shapes/type.enum";
 import Renderable from "Main/2D-Shapes/Interfaces/renderable.interface";
-import Transformable from "2DShapes/Interfaces/transformable.interface";
+import Transformable from "Shapes/Interfaces/transformable.interface";
 import Transformation from "Main/Operations/Transformation";
 
 class Rectangle extends Shape implements Renderable, Transformable {
@@ -93,6 +93,17 @@ class Rectangle extends Shape implements Renderable, Transformable {
         }, [] as number[]));
 
         gl.bufferData(gl.ARRAY_BUFFER, colors, gl.STATIC_DRAW);
+    }
+
+    public setRectangleAttributes(tx: number, ty: number, degree: number, sx: number, sy: number, kx: number, ky: number, arrayOfPoints: Point[]): void {
+        this.arrayOfPoints = arrayOfPoints;
+        this.tx = tx;
+        this.ty = ty;
+        this.degree = degree;
+        this.sx = sx;
+        this.sy = sy;
+        this.kx = kx;
+        this.ky = ky;
     }
 }
 

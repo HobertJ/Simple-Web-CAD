@@ -43,7 +43,7 @@ class Line extends Shape implements Renderable, Transformable {
             this.sy,
             this.kx,
             this.ky,
-            this.center
+            this.getCenter()
           ).flatten();
       
           gl.uniformMatrix3fv(matrixLocation, false, matrix);
@@ -85,6 +85,7 @@ class Line extends Shape implements Renderable, Transformable {
             acc.push(...point.getPair());
             return acc;
         }, [] as number[]));
+        console.log("haleluya");
 
         gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
     }
@@ -97,6 +98,17 @@ class Line extends Shape implements Renderable, Transformable {
 
         gl.bufferData(gl.ARRAY_BUFFER, colors, gl.STATIC_DRAW);
     }  
+
+    public setLineAttributes(tx: number, ty: number, degree: number, sx: number, sy: number, kx: number, ky: number, p2: Point): void {
+        this.arrayOfPoints.push(p2);
+        this.tx = tx;
+        this.ty = ty;
+        this.degree = degree;
+        this.sx = sx;
+        this.sy = sy;
+        this.kx = kx;
+        this.ky = ky;
+    }
 }
 
 export default Line;

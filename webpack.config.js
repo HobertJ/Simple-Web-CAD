@@ -1,6 +1,8 @@
 const path = require('path');
 
 module.exports = {
+    mode: "development",
+    devtool: "inline-source-map",
     entry: './src/index.ts',
     output: {
         filename: "index.js",
@@ -16,7 +18,13 @@ module.exports = {
         ],
     },
     resolve: {
-        extensions: ['.ts', '.js', '.jsx', 'tsx'],
+        extensions: ['.ts', '.js', '.jsx', '.tsx'],
+        alias : {
+            Main: path.resolve(__dirname, 'src/'),
+            Operations : path.resolve(__dirname, 'src/Operations/'),
+            Shapes: path.resolve(__dirname, 'src/2D-Shapes/'),
+            Base: path.resolve(__dirname, 'src/Base/'),
+        }
     },
     devServer: {
         static: {

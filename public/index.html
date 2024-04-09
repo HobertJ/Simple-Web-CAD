@@ -66,7 +66,7 @@
                 </div>
                 <h2>Tools</h2>
                 <button class="btn btn-primary btn-tools" id="save-btn">Save</button>
-                <button class="btn btn-primary btn-tools" id="load-btn">Load</button>
+                <button class="btn btn-primary btn-tools" id="upload-btn">Load</button>
                 <button type="button" class="btn btn-primary btn-tools" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
                     Help
                 </button>
@@ -109,28 +109,14 @@
                 <input type="range" min="0" max="100" value="50" class="slider" id="sliderRotation">
                 <span id="slider-value">50</span>
             </div>
+            <h4>Slider Width</h4>
+            <input type="range" min="0" max="100" value="50" class="slider" id="sliderShearX">
+            <h4>Slider Width</h4>
+            <input type="range" min="0" max="100" value="50" class="slider" id="sliderShearY">
         
         <div class="bottom-section">
-        <div class="btn-group">
-            <button class="btn btn-primary btn-md" id="dropdown-point" type="button">
-              Small split button
-            </button>
-            <button type="button" class="btn btn-md btn-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false" id="pointPicker">
-              <span class="visually-hidden">Toggle Dropdown</span>
-            </button>
-            <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#" onclick=changeButtonText(this)>Action</a></li>
-                <li><a class="dropdown-item" href="#" onclick=changeButtonText(this)>Another action</a></li>
-                <li><a class="dropdown-item" href="#" onclick=changeButtonText(this)>Something else here</a></li>
-                <li><a class="dropdown-item" href="#" onclick=changeButtonText(this)>Action</a></li>
-                <li><a class="dropdown-item" href="#" onclick=changeButtonText(this)>Another action</a></li>
-                <li><a class="dropdown-item" href="#" onclick=changeButtonText(this)>Something else here</a></li>
-                <li><a class="dropdown-item" href="#" onclick=changeButtonText(this)>Action</a></li>
-                <li><a class="dropdown-item" href="#" onclick=changeButtonText(this)>Another action</a></li>
-                <li><a class="dropdown-item" href="#" onclick=changeButtonText(this)>Something else here</a></li>
-            </ul>
-          </div>
-
+          <select name="" id="list-of-shapes"></select>
+          <select name="" id="pointPicker"></select>
           <input type="color" id="colorPicker" name="colorPicker" value="#ff0000">
         </div>
 

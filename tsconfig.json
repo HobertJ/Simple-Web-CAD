@@ -5,12 +5,14 @@
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strictNullChecks": false,
+    "sourceMap": true,
     "strict": true,
     "skipLibCheck": true,
     "paths": {
       "Main/*": ["./src/*"],
-      "2DShapes/*": ["./src/2D-Shapes/*"],
+      "Shapes/*": ["./src/2D-Shapes/*"],
       "Base/*": ["./src/Base/*"],
+      "Operations/*": ["./src/Operations/*"],
     }
   }
 }

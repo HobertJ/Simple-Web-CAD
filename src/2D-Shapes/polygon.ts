@@ -138,6 +138,17 @@ class Polygon extends Shape implements Renderable, Transformable {
           pointPicker.appendChild(newPoint);
         }
       }
+
+      public setPolygonAttributes(tx: number, ty: number, degree: number, sx: number, sy: number, kx: number, ky: number, arrayOfPoints: Point[]): void {
+        this.arrayOfPoints = arrayOfPoints;
+        this.tx = tx;
+        this.ty = ty;
+        this.degree = degree;
+        this.sx = sx;
+        this.sy = sy;
+        this.kx = kx;
+        this.ky = ky;
+      }
     
 }
 

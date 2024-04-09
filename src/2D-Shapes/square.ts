@@ -96,6 +96,17 @@ class Square extends Shape implements Renderable, Transformable {
 
         gl.bufferData(gl.ARRAY_BUFFER, colors, gl.STATIC_DRAW);
     }
+
+    public setSquareAttributes(tx: number, ty: number, degree: number, sx: number, sy: number, kx: number, ky: number, arrayOfPoints: Point[]): void {
+        this.arrayOfPoints = arrayOfPoints;
+        this.tx = tx;
+        this.ty = ty;
+        this.degree = degree;
+        this.sx = sx;
+        this.sy = sy;
+        this.kx = kx;
+        this.ky = ky;
+    }
 }
 
 export default Square;
