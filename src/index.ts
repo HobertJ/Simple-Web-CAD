@@ -28,13 +28,17 @@ if (gl === null) {
   );
 }
 
+gl.canvas.width = 1600;
+gl.canvas.height = 900;
+
+
 // Set clear color to black, fully opaque
-gl.clearColor(1.0, 1.0, 1.0, 1.0);
+gl.clearColor(1.0, 0.0, 0.0, 1.0);
 // Clear the color buffer with specified clear color
 gl.clear(gl.COLOR_BUFFER_BIT);
 // if (gl===null) {
 //     return;
-// }
+// }~
 
 // Vertex shader program
 const vsSource = `
@@ -89,8 +93,7 @@ let isDrawing = false;
 /* Setup Viewport */
 const width = (gl.canvas as HTMLCanvasElement).clientWidth;
 const height = (gl.canvas as HTMLCanvasElement).clientHeight;
-gl.canvas.width = 800;
-gl.canvas.height = 800;
+
 
 const x = 0; // x coordinate of the lower left corner of the viewport rectangle
 const y = 0; // y coordinate of the lower left corner of the viewport rectangle
@@ -98,9 +101,9 @@ gl.viewport(x, y, gl.canvas.width, gl.canvas.height); // sets the viewport to co
 
 const positionBuffer = gl.createBuffer();
 const colorBuffer = gl.createBuffer();
-gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
-setAttributes(gl, positionBuffer, colorBuffer, programInfo);
+// gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+// gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
+// setAttributes(gl, positionBuffer, colorBuffer, programInfo);
 
 let currentObject: Shape & Renderable & Transformable;
 // =========================================================
@@ -163,16 +166,20 @@ uploadBtn.addEventListener("click", () => {
 canvas.addEventListener("mousedown", (event) => {
   const x = event.clientX;
   const y = event.clientY;
+  // console.log(x);
+  // console.log(y);
   const point = new Point([x, y]);
-  console.log("kontolodon");
+  // console.log("kontolodon");
 
   if (isDrawing) {
     if (currentObject.type !== Type.Polygon) {
       shapes.push(currentObject);
       currentObject.draw(point);
+      // console.log("Center: ", currentObject.getCenter())
       setupOption(true, currentObject);
-      console.log("kontolodon2");
-      render(gl, programInfo, currentObject, positionBuffer , colorBuffer);
+      // console.log("kontolodon2");
+      // render(gl, programInfo, currentObject, positionBuffer , colorBuffer);
+      renderAll(gl, programInfo, shapes, positionBuffer, colorBuffer);
       isDrawing = false;
       currentObject = null;
     } else {
@@ -199,6 +206,9 @@ canvas.addEventListener("mousedown", (event) => {
         break;
       case Type.Square:
         currentObject = new Square(shapes.length, point);
+        // console.log("x: ",x)
+        // console.log("y: ",  y)
+
         isDrawing = true;
         break;
       case Type.Rectangle:
@@ -293,13 +303,13 @@ canvas.addEventListener("mousemove", (event) => {
   const x = event.clientX;
   const y = event.clientY;
   const point = new Point([x, y]);
-  console.log("aswwww");
+  // console.log("aswwww");
 
   if (isDrawing) {
     if (currentObject.type !== Type.Polygon) {
       currentObject.draw(point);
-      renderAll(gl, programInfo, shapes, positionBuffer, colorBuffer);
       render(gl, programInfo, currentObject, positionBuffer, colorBuffer);
+      // renderAll(gl, programInfo, shapes, positionBuffer, colorBuffer);
     }
   }
 });

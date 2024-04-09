@@ -71,6 +71,7 @@ class Rectangle extends Shape implements Renderable, Transformable {
         this.arrayOfPoints[1] = new Point([this.arrayOfPoints[0].x, point.y]);
         this.arrayOfPoints[2] = point;
         this.arrayOfPoints[3] = new Point([point.x, this.arrayOfPoints[0].y]);
+        this.center = this.getCenter();
     }
 
     public getNumberOfVerticesToBeDrawn(): number {
@@ -78,21 +79,31 @@ class Rectangle extends Shape implements Renderable, Transformable {
     }
 
     public addPosition(gl: WebGLRenderingContext): void {
-        const vertices = new Float32Array(this.arrayOfPoints.reduce((acc, point) => {
-            acc.push(...point.getPair());
-            return acc;
-        }, [] as number[]));
-
-        gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
+        gl.bufferData(
+            gl.ARRAY_BUFFER,
+            new Float32Array([
+              ...this.arrayOfPoints[0].getPair(),
+              ...this.arrayOfPoints[1].getPair(),
+              ...this.arrayOfPoints[2].getPair(),
+              ...this.arrayOfPoints[3].getPair(),
+              ...this.arrayOfPoints[0].getPair(),
+            ]),
+            gl.STATIC_DRAW
+          );
     }
 
     public addColor(gl: WebGLRenderingContext): void {
-        const colors = new Float32Array(this.arrayOfPoints.reduce((acc, point) => {
-            acc.push(...point.getColor());
-            return acc;
-        }, [] as number[]));
-
-        gl.bufferData(gl.ARRAY_BUFFER, colors, gl.STATIC_DRAW);
+        gl.bufferData(
+            gl.ARRAY_BUFFER,
+            new Float32Array([
+              ...this.arrayOfPoints[0].getColor(),
+              ...this.arrayOfPoints[1].getColor(),
+              ...this.arrayOfPoints[2].getColor(),
+              ...this.arrayOfPoints[3].getColor(),
+              ...this.arrayOfPoints[0].getColor(),
+            ]),
+            gl.STATIC_DRAW
+          );
     }
 
     public setRectangleAttributes(tx: number, ty: number, degree: number, sx: number, sy: number, kx: number, ky: number, arrayOfPoints: Point[]): void {

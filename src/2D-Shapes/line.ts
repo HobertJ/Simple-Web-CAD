@@ -77,26 +77,23 @@ class Line extends Shape implements Renderable, Transformable {
     }
 
     public getNumberOfVerticesToBeDrawn(): number {
-        return this.arrayOfPoints.length;
+        return 2;
     } 
     
     public addPosition(gl: WebGLRenderingContext): void {
-        const vertices = new Float32Array(this.arrayOfPoints.reduce((acc, point) => {
-            acc.push(...point.getPair());
-            return acc;
-        }, [] as number[]));
-        console.log("haleluya");
-
-        gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
+        gl.bufferData(
+            gl.ARRAY_BUFFER,
+            new Float32Array([...this.arrayOfPoints[0].getPair(), ...this.arrayOfPoints[1].getPair()]),
+            gl.STATIC_DRAW
+          );
     }
 
     public addColor(gl: WebGLRenderingContext): void {
-        const colors = new Float32Array(this.arrayOfPoints.reduce((acc, point) => {
-            acc.push(...point.getColor());
-            return acc;
-        }, [] as number[]));
-
-        gl.bufferData(gl.ARRAY_BUFFER, colors, gl.STATIC_DRAW);
+        gl.bufferData(
+            gl.ARRAY_BUFFER,
+            new Float32Array([...this.arrayOfPoints[0].getColor(), ...this.arrayOfPoints[1].getColor()]),
+            gl.STATIC_DRAW
+          );
     }  
 
     public setLineAttributes(tx: number, ty: number, degree: number, sx: number, sy: number, kx: number, ky: number, p2: Point): void {

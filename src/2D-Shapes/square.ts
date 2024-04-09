@@ -63,38 +63,46 @@ class Square extends Shape implements Renderable, Transformable {
     public draw(p1: Point): void {
         this.arrayOfPoints[0] = p1;
 
-        if (this.arrayOfPoints.length === 1) {
-            for (let i = 1; i <= 3; i++) {
-                const angle = (i * Math.PI) / 2;
-                const rotationMatrix = Transformation.translation(this.center.getX(), this.center.getY())
-                    .multiplyMatrix(Transformation.rotation(angle))
-                    .multiplyMatrix(Transformation.translation(-this.center.getX(), -this.center.getY()));
-                const rotatedPoint = rotationMatrix.multiplyPoint(p1);
-                this.arrayOfPoints[i] = rotatedPoint;
-            }
+        for (let i = 1; i <= 3; i++) {
+            const angle = (i * Math.PI) / 2;
+            const rotationMatrix = Transformation.translation(this.center.getX(), this.center.getY())
+                .multiplyMatrix(Transformation.rotation(angle))
+                .multiplyMatrix(Transformation.translation(-this.center.getX(), -this.center.getY()));
+            const rotatedPoint = rotationMatrix.multiplyPoint(p1);
+            this.arrayOfPoints[i] = rotatedPoint;
         }
     }
 
     public getNumberOfVerticesToBeDrawn(): number {
-        return this.arrayOfPoints.length;
+        return 5;
     }
 
     public addPosition(gl: WebGLRenderingContext): void {
-        const vertices = new Float32Array(this.arrayOfPoints.reduce((acc, point) => {
-            acc.push(...point.getPair());
-            return acc;
-        }, [] as number[]));
-
-        gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
+        gl.bufferData(
+            gl.ARRAY_BUFFER,
+            new Float32Array([
+              ...this.arrayOfPoints[0].getPair(),
+              ...this.arrayOfPoints[1].getPair(),
+              ...this.arrayOfPoints[2].getPair(),
+              ...this.arrayOfPoints[3].getPair(),
+              ...this.arrayOfPoints[0].getPair(),
+            ]),
+            gl.STATIC_DRAW
+          );
     }
 
     public addColor(gl: WebGLRenderingContext): void {
-        const colors = new Float32Array(this.arrayOfPoints.reduce((acc, point) => {
-            acc.push(...point.getColor());
-            return acc;
-        }, [] as number[]));
-
-        gl.bufferData(gl.ARRAY_BUFFER, colors, gl.STATIC_DRAW);
+        gl.bufferData(
+            gl.ARRAY_BUFFER,
+            new Float32Array([
+              ...this.arrayOfPoints[0].getColor(),
+              ...this.arrayOfPoints[1].getColor(),
+              ...this.arrayOfPoints[2].getColor(),
+              ...this.arrayOfPoints[3].getColor(),
+              ...this.arrayOfPoints[0].getColor(),
+            ]),
+            gl.STATIC_DRAW
+          );
     }
 
     public setSquareAttributes(tx: number, ty: number, degree: number, sx: number, sy: number, kx: number, ky: number, arrayOfPoints: Point[]): void {

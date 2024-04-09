@@ -23,8 +23,8 @@ class Transformation{
         const matrix = new Matrix([1, 0, 0], [kx, 1, 0], [0, 0, 1]);
         return matrix;
     }
-    public static shearY(kx: number): Matrix {
-        const matrix = new Matrix([1, kx, 0], [0, 1, 0], [0, 0, 1]);
+    public static shearY(ky: number): Matrix {
+        const matrix = new Matrix([1, ky, 0], [0, 1, 0], [0, 0, 1]);
         return matrix;
     }
     public static transformationMatrix(
