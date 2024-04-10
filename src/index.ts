@@ -175,14 +175,15 @@ canvas.addEventListener("mousedown", (event) => {
       if (currentObject.id == shapes.length) {
         // belum dipush ke shapes
         if (currentObject.isDrawable()) {
-          shapes.push(currentObject);
           setupOption(true, currentObject);
-          render(gl, programInfo, currentObject, positionBuffer, colorBuffer);
+          // render(gl, programInfo, currentObject, positionBuffer, colorBuffer);
+          renderAll(gl, programInfo, shapes, positionBuffer, colorBuffer);
           isDrawing = false;
         }
       } else {
         setupOption(true, currentObject);
-        render(gl, programInfo, currentObject, positionBuffer, colorBuffer);
+        // render(gl, programInfo, currentObject, positionBuffer, colorBuffer);
+        renderAll(gl, programInfo, shapes, positionBuffer, colorBuffer);
         isDrawing = false;
       }
     }
@@ -217,10 +218,14 @@ canvas.addEventListener("mousemove", (event) => {
   const y = event.clientY;
   const point = new Point([x, y]);
   // console.log("aswwww");
-
+  console.log(point.getPair());
   if (isDrawing) {
     if (currentObject.type !== Type.Polygon) {
       currentObject.draw(point);
+      if (currentObject.type == Type.Square){
+        console.log(currentObject.center)
+        console.log(currentObject.arrayOfPoints)
+      }
       // render(gl, programInfo, currentObject, positionBuffer, colorBuffer);
       renderAll(gl, programInfo, shapes, positionBuffer, colorBuffer);
     }
