@@ -28,17 +28,6 @@ if (gl === null) {
   );
 }
 
-gl.canvas.width = 1600;
-gl.canvas.height = 900;
-
-
-// Set clear color to black, fully opaque
-gl.clearColor(1.0, 0.0, 0.0, 1.0);
-// Clear the color buffer with specified clear color
-gl.clear(gl.COLOR_BUFFER_BIT);
-// if (gl===null) {
-//     return;
-// }~
 
 // Vertex shader program
 const vsSource = `
@@ -80,10 +69,23 @@ const programInfo = {
   },
 };
 
-// Clear the canvas before we start drawing on it.
-gl.clear(gl.COLOR_BUFFER_BIT);
 // Tell WebGL to use our program when drawing
 gl.useProgram(shaderProgram);
+
+const width = (gl.canvas as HTMLCanvasElement).clientWidth;
+const height = (gl.canvas as HTMLCanvasElement).clientHeight;
+canvas.width = width;
+canvas.height = height;
+// Set clear color to black, fully opaque
+gl.clearColor(1.0, 1.0, 1.0, 1.0);
+// Clear the color buffer with specified clear color
+
+
+gl.viewport(0, 0, gl.canvas.width, gl.canvas.height); // sets the viewport to cover the entire canvas, starting from the lower-left corner and extending to the canvas's width and height.
+
+// Clear the canvas before we start drawing on it.
+gl.clear(gl.COLOR_BUFFER_BIT);
+
 // ===============================================================================================
 // const canvas = document.getElementById("canvas") as HTMLCanvasElement;
 let shapes: (Shape & Renderable & Transformable)[] = [];
@@ -91,13 +93,6 @@ let type: Type;
 let isDrawing = false;
 
 /* Setup Viewport */
-const width = (gl.canvas as HTMLCanvasElement).clientWidth;
-const height = (gl.canvas as HTMLCanvasElement).clientHeight;
-
-
-const x = 0; // x coordinate of the lower left corner of the viewport rectangle
-const y = 0; // y coordinate of the lower left corner of the viewport rectangle
-gl.viewport(x, y, gl.canvas.width, gl.canvas.height); // sets the viewport to cover the entire canvas, starting from the lower-left corner and extending to the canvas's width and height.
 
 const positionBuffer = gl.createBuffer();
 const colorBuffer = gl.createBuffer();
@@ -166,19 +161,12 @@ uploadBtn.addEventListener("click", () => {
 canvas.addEventListener("mousedown", (event) => {
   const x = event.clientX;
   const y = event.clientY;
-  // console.log(x);
-  // console.log(y);
   const point = new Point([x, y]);
-  // console.log("kontolodon");
 
   if (isDrawing) {
     if (currentObject.type !== Type.Polygon) {
-      shapes.push(currentObject);
       currentObject.draw(point);
-      // console.log("Center: ", currentObject.getCenter())
       setupOption(true, currentObject);
-      // console.log("kontolodon2");
-      // render(gl, programInfo, currentObject, positionBuffer , colorBuffer);
       renderAll(gl, programInfo, shapes, positionBuffer, colorBuffer);
       isDrawing = false;
       currentObject = null;
@@ -202,101 +190,26 @@ canvas.addEventListener("mousedown", (event) => {
     switch (type) {
       case Type.Line:
         currentObject = new Line(shapes.length, point);
+        shapes.push(currentObject);
         isDrawing = true;
         break;
       case Type.Square:
         currentObject = new Square(shapes.length, point);
-        // console.log("x: ",x)
-        // console.log("y: ",  y)
-
+        shapes.push(currentObject);
         isDrawing = true;
         break;
       case Type.Rectangle:
         currentObject = new Rectangle(shapes.length, point);
+        shapes.push(currentObject);
         isDrawing = true;
         break;
       case Type.Polygon:
         currentObject = new Polygon(shapes.length, point);
+        shapes.push(currentObject);
         isDrawing = true;
         break;
     }
   }
-
-  //   switch (type) {
-  //     case Type.Line:
-  //       if (!isDrawing) {
-  //         const line = new Line(shapes.length, point);
-  //         shapes.push(line);
-
-  //         isDrawing = true;
-  //       } else {
-  //         const line = shapes[shapes.length - 1] as Line;
-  //         line.draw(point);
-  //         render(gl, programInfo, line);
-  //         setupOption(true, line);
-
-  //         isDrawing = false;
-  //       }
-  //       break;
-
-  //     case Type.Square:
-  //       if (!isDrawing) {
-  //         const square = new Square(shapes.length, point);
-  //         shapes.push(square);
-
-  //         isDrawing = true;
-  //       } else {
-  //         const square = shapes[shapes.length - 1] as Square;
-  //         square.draw(point);
-  //         render(gl, programInfo, square);
-  //         setupOption(true, square);
-
-  //         isDrawing = false;
-  //       }
-  //       break;
-
-  //     case Type.Rectangle:
-  //       if (!isDrawing) {
-  //         const rectangle = new Rectangle(shapes.length, point);
-  //         shapes.push(rectangle);
-
-  //         isDrawing = true;
-  //       } else {
-  //         const rectangle =shapes[shapes.length - 1] as Rectangle;
-
-  //         rectangle.draw(point);
-  //         render(gl, programInfo, rectangle);
-  //         setupOption(true, rectangle);
-
-  //         isDrawing = false;
-  //       }
-  //       break;
-
-  //     case Type.Polygon:
-  //       if (!isDrawing) {
-  //         const polygon = new Polygon(shapes.length, point);
-  //         shapes.push(polygon);
-
-  //         isDrawing = true;
-  //       } else {
-  //         const polygon = shapes[shapes.length - 1] as Polygon;
-
-  //         polygon.draw(point);
-  //         render(gl, programInfo, polygon);
-  //         setupOption(isFirstDrawing, polygon);
-
-  //         isFirstDrawing = false;
-  //       }
-  //       break;
-
-  //     case Type.POLYGON_REDRAW:
-  //       // const polygon = objects[polygonRedrawIndex] as Polygon;
-
-  //       // polygon.updatePoint(point);
-  //       // polygon.render(gl, program, positionBuffer, colorBuffer);
-
-  //       // break;
-  //   }
 });
 
 canvas.addEventListener("mousemove", (event) => {
@@ -308,17 +221,11 @@ canvas.addEventListener("mousemove", (event) => {
   if (isDrawing) {
     if (currentObject.type !== Type.Polygon) {
       currentObject.draw(point);
-      render(gl, programInfo, currentObject, positionBuffer, colorBuffer);
-      // renderAll(gl, programInfo, shapes, positionBuffer, colorBuffer);
+      // render(gl, programInfo, currentObject, positionBuffer, colorBuffer);
+      renderAll(gl, programInfo, shapes, positionBuffer, colorBuffer);
     }
   }
 });
-// =========================================================
-
-// =========================================================
-// Initialize Dynamic HTML Elements & Set Event Listeners
-
-// =========================================================
 
 function setupOption(
   isFirstDrawing: boolean,
@@ -353,7 +260,8 @@ function setupSelector(
   sliderX.addEventListener("input", (event) => {
     const deltaX = (event.target as HTMLInputElement).value;
     element.tx = Number(deltaX);
-  });
+    renderAll(gl, programInfo, shapes, positionBuffer, colorBuffer);
+  });   
 
   const sliderY = document.getElementById("sliderY") as HTMLInputElement;
   sliderY.min = "-600";
@@ -363,6 +271,7 @@ function setupSelector(
   sliderX.addEventListener("input", (event) => {
     const deltaY = (event.target as HTMLInputElement).value;
     element.ty = -Number(deltaY);
+    renderAll(gl, programInfo, shapes, positionBuffer, colorBuffer);
   });
 
   const sliderLength = document.getElementById(
@@ -395,6 +304,7 @@ function setupSelector(
   sliderLength.addEventListener("input", (event) => {
     const deltaLength = (event.target as HTMLInputElement).value;
     element.sx = 1 + Number(deltaLength) / length;
+    renderAll(gl, programInfo, shapes, positionBuffer, colorBuffer);
   });
 
   const sliderWidth = document.getElementById(
@@ -430,6 +340,7 @@ function setupSelector(
   sliderWidth.addEventListener("input", (event) => {
     const deltaWidth = (event.target as HTMLInputElement).value;
     element.sy = 1 + Number(deltaWidth) / width;
+    renderAll(gl, programInfo, shapes, positionBuffer, colorBuffer);
   });
 
   const sliderRotation = document.getElementById(
@@ -442,6 +353,7 @@ function setupSelector(
   sliderRotation.addEventListener("input", (event) => {
     const deltaDegree = (event.target as HTMLInputElement).value;
     element.degree = (Number(deltaDegree) / 180) * Math.PI;
+    renderAll(gl, programInfo, shapes, positionBuffer, colorBuffer);
   });
 
   const sliderShearX = document.getElementById(
@@ -455,6 +367,7 @@ function setupSelector(
   sliderShearX.addEventListener("input", (event) => {
     const deltaShearX = (event.target as HTMLInputElement).value;
     element.kx = Number(deltaShearX);
+    renderAll(gl, programInfo, shapes, positionBuffer, colorBuffer);
   });
 
   const sliderShearY = document.getElementById(
@@ -468,6 +381,7 @@ function setupSelector(
   sliderShearX.addEventListener("input", (event) => {
     const deltaShearY = (event.target as HTMLInputElement).value;
     element.ky = Number(deltaShearY);
+    renderAll(gl, programInfo, shapes, positionBuffer, colorBuffer);
   });
 
   const pointPicker = document.getElementById(

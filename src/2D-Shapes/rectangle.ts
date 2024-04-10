@@ -64,7 +64,8 @@ class Rectangle extends Shape implements Renderable, Transformable {
     }
 
     public isDrawable(): boolean {
-        return this.arrayOfPoints.filter(point => point !== null).length === 4;
+        // return this.arrayOfPoints.filter(point => point !== null).length === 4;
+        return this.arrayOfPoints[2] !== null;
     }
 
     public draw(point: Point): void {
@@ -75,7 +76,7 @@ class Rectangle extends Shape implements Renderable, Transformable {
     }
 
     public getNumberOfVerticesToBeDrawn(): number {
-        return this.arrayOfPoints.length;
+        return 5;
     }
 
     public addPosition(gl: WebGLRenderingContext): void {

@@ -19,7 +19,7 @@ class Square extends Shape implements Renderable, Transformable {
     public constructor(id: number, centerPoint: Point) {
         super(id, 4, Type.Square);
         this.center = centerPoint;
-        this.arrayOfPoints = [];
+        this.arrayOfPoints = [null, null , null, null];
         this.tx = 0;
         this.ty = 0;
         this.degree = 0;
@@ -65,10 +65,10 @@ class Square extends Shape implements Renderable, Transformable {
 
         for (let i = 1; i <= 3; i++) {
             const angle = (i * Math.PI) / 2;
-            const rotationMatrix = Transformation.translation(this.center.getX(), this.center.getY())
+            const rotatedPoint = Transformation.translation(this.center.getX(), this.center.getY())
                 .multiplyMatrix(Transformation.rotation(angle))
-                .multiplyMatrix(Transformation.translation(-this.center.getX(), -this.center.getY()));
-            const rotatedPoint = rotationMatrix.multiplyPoint(p1);
+                .multiplyMatrix(Transformation.translation(-this.center.getX(), -this.center.getY()))
+                .multiplyPoint(p1);
             this.arrayOfPoints[i] = rotatedPoint;
         }
     }

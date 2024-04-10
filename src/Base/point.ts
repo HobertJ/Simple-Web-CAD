@@ -6,7 +6,7 @@ class Point  extends Coordinate {
     public b: number;
     public a: number;
 
-    public constructor(position: [number, number], color: [number, number, number, number] = [1, 0, 0, 0]) {
+    public constructor(position: [number, number], color: [number, number, number, number] = [0, 0, 0, 1]) {
         super(...position, 1);
 
         [this.r, this.g, this.b, this.a] = color;
