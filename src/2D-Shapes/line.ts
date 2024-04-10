@@ -51,6 +51,7 @@ class Line extends Shape implements Renderable, Transformable {
 
     public getCenter(): Point {
         const numPoints = this.arrayOfPoints.length;
+        console.log(numPoints)
         let centerX = 0;
         let centerY = 0;
         for (const point of this.arrayOfPoints) {

@@ -79,6 +79,7 @@ h2 {
 
 #pointPicker {
     margin-top: 20px;
+    width: 150px;
 }
 
 .bottom-section {
@@ -94,7 +95,7 @@ h2 {
 #colorPicker{
     margin-left: 5px;
     margin-top: 20px;
-    height: 37px;
+    height: 30px;
     width: 40px;
 }
 
@@ -108,4 +109,9 @@ canvas {
 body{
     height: 100vh;
     overflow: hidden;
+}
+
+#list-of-shapes {
+    width: 225px;
+    margin-bottom: 15px;
 }

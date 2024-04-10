@@ -105,7 +105,7 @@ let currentObject: Shape & Renderable & Transformable;
 // Fix HTML Elements Event Listeners
 
 /* List of Shapes Listener */
-const listOfShapes = document.getElementById("dropdown") as HTMLSelectElement;
+const listOfShapes = document.getElementById("list-of-shapes") as HTMLSelectElement;
 listOfShapes.addEventListener("change", () => {
   const index: number = +listOfShapes.selectedOptions[0].value;
 
@@ -217,16 +217,10 @@ canvas.addEventListener("mousemove", (event) => {
   const x = event.clientX;
   const y = event.clientY;
   const point = new Point([x, y]);
-  // console.log("aswwww");
-  console.log(point.getPair());
+
   if (isDrawing) {
     if (currentObject.type !== Type.Polygon) {
       currentObject.draw(point);
-      if (currentObject.type == Type.Square){
-        console.log(currentObject.center)
-        console.log(currentObject.arrayOfPoints)
-      }
-      // render(gl, programInfo, currentObject, positionBuffer, colorBuffer);
       renderAll(gl, programInfo, shapes, positionBuffer, colorBuffer);
     }
   }
@@ -238,7 +232,22 @@ function setupOption(
 ): void {
   const option = document.createElement("option");
   option.value = element.id.toString();
-  option.text = `${element.type.toString()}_${element.id}`;
+  let optionText: string;
+  switch (type) {
+    case Type.Line:
+      optionText = `Line_${element.id}`;
+      break;
+    case Type.Square:
+      optionText = `Square_${element.id}`;
+      break;
+    case Type.Rectangle:
+      optionText = `Rectangle_${element.id}`;
+      break;
+    case Type.Polygon:
+      optionText = `Polygon_${element.id}`;
+      break;
+  }
+  option.text = optionText;
 
   if (isFirstDrawing) {
     const listOfShapes = document.getElementById(
@@ -256,7 +265,9 @@ function setupSelector(
   programInfo: ProgramInfo,
   element: Renderable & Transformable & Shape
 ): void {
-  const sliderX = document.getElementById("sliderX") as HTMLInputElement;
+  const sliderX_original = document.getElementById("sliderX") as HTMLInputElement;
+  const sliderX = sliderX_original.cloneNode(true) as HTMLInputElement;
+  sliderX_original.parentNode.replaceChild(sliderX, sliderX_original);
   sliderX.min = "-600";
   sliderX.max = "600";
   sliderX.value = element.tx.toString();
@@ -268,20 +279,24 @@ function setupSelector(
     renderAll(gl, programInfo, shapes, positionBuffer, colorBuffer);
   });   
 
-  const sliderY = document.getElementById("sliderY") as HTMLInputElement;
+  const sliderY_original = document.getElementById("sliderY") as HTMLInputElement;
+  const sliderY = sliderY_original.cloneNode(true) as HTMLInputElement;
+  sliderY_original.parentNode.replaceChild(sliderY, sliderY_original);
   sliderY.min = "-600";
   sliderY.max = "600";
   sliderY.value = (-element.ty).toString();
   sliderY.step = "10";
-  sliderX.addEventListener("input", (event) => {
+  sliderY.addEventListener("input", (event) => {
     const deltaY = (event.target as HTMLInputElement).value;
     element.ty = -Number(deltaY);
     renderAll(gl, programInfo, shapes, positionBuffer, colorBuffer);
   });
 
-  const sliderLength = document.getElementById(
+  const sliderLength_original = document.getElementById(
     "sliderLength"
   ) as HTMLInputElement;
+  const sliderLength = sliderLength_original.cloneNode(true) as HTMLInputElement;
+  sliderLength_original.parentNode.replaceChild(sliderLength, sliderLength_original);
   sliderLength.min = "0";
   sliderLength.max = "600";
   let length: number;
@@ -312,14 +327,16 @@ function setupSelector(
     renderAll(gl, programInfo, shapes, positionBuffer, colorBuffer);
   });
 
-  const sliderWidth = document.getElementById(
+  const sliderWidth_original = document.getElementById(
     "sliderWidth"
   ) as HTMLInputElement;
+  const sliderWidth = sliderWidth_original.cloneNode(true) as HTMLInputElement;
+  sliderWidth_original.parentNode.replaceChild(sliderWidth, sliderWidth_original);
   sliderWidth.min = "0";
   sliderWidth.max = "600";
   let width: number;
 
-  if (element.type == Type.Rectangle) {
+  if (element.type == Type.Rectangle || element.type == Type.Square) {
     width = Math.sqrt(
       (element.arrayOfPoints[0].x - element.arrayOfPoints[3].x) ** 2 +
         (element.arrayOfPoints[0].y - element.arrayOfPoints[3].y) ** 2
@@ -338,9 +355,7 @@ function setupSelector(
       }
     }
     length = max - min;
-  } else {
-    width = 0;
-  }
+  } 
   sliderWidth.value = ((element.sy - 1) * width).toString();
   sliderWidth.addEventListener("input", (event) => {
     const deltaWidth = (event.target as HTMLInputElement).value;
@@ -348,9 +363,11 @@ function setupSelector(
     renderAll(gl, programInfo, shapes, positionBuffer, colorBuffer);
   });
 
-  const sliderRotation = document.getElementById(
+  const sliderRotation_original = document.getElementById(
     "sliderRotation"
   ) as HTMLInputElement;
+  const sliderRotation = sliderRotation_original.cloneNode(true) as HTMLInputElement;
+  sliderRotation_original.parentNode.replaceChild(sliderRotation, sliderRotation_original);
   sliderRotation.min = "0";
   sliderRotation.max = "360";
   sliderRotation.value = ((180 * element.degree) / Math.PI).toString();
@@ -361,13 +378,15 @@ function setupSelector(
     renderAll(gl, programInfo, shapes, positionBuffer, colorBuffer);
   });
 
-  const sliderShearX = document.getElementById(
+  const sliderShearX_original = document.getElementById(
     "sliderShearX"
   ) as HTMLInputElement;
-  sliderShearX.min = "-600";
-  sliderShearX.max = "600";
+  const sliderShearX = sliderShearX_original.cloneNode(true) as HTMLInputElement;
+  sliderShearX_original.parentNode.replaceChild(sliderShearX, sliderShearX_original);
+  sliderShearX.min = "0";
+  sliderShearX.max = "10";
   sliderShearX.value = element.kx.toString();
-  sliderShearX.step = "10";
+  sliderShearX.step = "0.1";
 
   sliderShearX.addEventListener("input", (event) => {
     const deltaShearX = (event.target as HTMLInputElement).value;
@@ -375,23 +394,27 @@ function setupSelector(
     renderAll(gl, programInfo, shapes, positionBuffer, colorBuffer);
   });
 
-  const sliderShearY = document.getElementById(
+  const sliderShearY_original = document.getElementById(
     "sliderShearY"
   ) as HTMLInputElement;
-  sliderShearY.min = "-600";
-  sliderShearY.max = "600";
+  const sliderShearY = sliderShearY_original.cloneNode(true) as HTMLInputElement;
+  sliderShearY_original.parentNode.replaceChild(sliderShearY, sliderShearY_original);
+  sliderShearY.min = "0";
+  sliderShearY.max = "10";
   sliderShearY.value = element.ky.toString();
-  sliderShearY.step = "10";
+  sliderShearY.step = "0.1";
 
-  sliderShearX.addEventListener("input", (event) => {
+  sliderShearY.addEventListener("input", (event) => {
     const deltaShearY = (event.target as HTMLInputElement).value;
     element.ky = Number(deltaShearY);
     renderAll(gl, programInfo, shapes, positionBuffer, colorBuffer);
   });
 
-  const pointPicker = document.getElementById(
+  const pointPicker_original = document.getElementById(
     "pointPicker"
   ) as HTMLSelectElement;
+  const pointPicker = pointPicker_original.cloneNode(true) as HTMLSelectElement; 
+  pointPicker_original.parentElement.replaceChild(pointPicker, pointPicker_original);
   pointPicker.addEventListener("change", () => {
     const pointIndex: number = Number(pointPicker.value);
     setupColorPicker(gl, programInfo, pointIndex, element);
