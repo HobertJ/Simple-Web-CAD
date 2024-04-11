@@ -191,25 +191,22 @@ canvas.addEventListener("mousedown", (event) => {
     switch (type) {
       case Type.Line:
         currentObject = new Line(shapes.length, point);
-        shapes.push(currentObject);
         isDrawing = true;
         break;
       case Type.Square:
         currentObject = new Square(shapes.length, point);
-        shapes.push(currentObject);
         isDrawing = true;
         break;
       case Type.Rectangle:
         currentObject = new Rectangle(shapes.length, point);
-        shapes.push(currentObject);
         isDrawing = true;
         break;
       case Type.Polygon:
         currentObject = new Polygon(shapes.length, point);
-        shapes.push(currentObject);
         isDrawing = true;
         break;
     }
+    shapes.push(currentObject);
   }
 });
 
@@ -366,15 +363,20 @@ function setupSelector(
   const sliderRotation_original = document.getElementById(
     "sliderRotation"
   ) as HTMLInputElement;
+  const sliderRotation_value = document.getElementById(
+    "slider-rotation-value"
+  ) as HTMLInputElement;
   const sliderRotation = sliderRotation_original.cloneNode(true) as HTMLInputElement;
   sliderRotation_original.parentNode.replaceChild(sliderRotation, sliderRotation_original);
   sliderRotation.min = "0";
   sliderRotation.max = "360";
   sliderRotation.value = ((180 * element.degree) / Math.PI).toString();
+  sliderRotation_value.textContent = ((180 * element.degree) / Math.PI).toFixed(0).toString(); 
   sliderRotation.step = "10";
   sliderRotation.addEventListener("input", (event) => {
     const deltaDegree = (event.target as HTMLInputElement).value;
     element.degree = (Number(deltaDegree) / 180) * Math.PI;
+    sliderRotation_value.textContent = ((180 * element.degree) / Math.PI).toFixed(0).toString(); 
     renderAll(gl, programInfo, shapes, positionBuffer, colorBuffer);
   });
 
@@ -415,6 +417,7 @@ function setupSelector(
   ) as HTMLSelectElement;
   const pointPicker = pointPicker_original.cloneNode(true) as HTMLSelectElement; 
   pointPicker_original.parentElement.replaceChild(pointPicker, pointPicker_original);
+  pointPicker.innerHTML = "";
   pointPicker.addEventListener("change", () => {
     const pointIndex: number = Number(pointPicker.value);
     setupColorPicker(gl, programInfo, pointIndex, element);
