@@ -49,5 +49,27 @@ class Transformation{
         .multiplyMatrix(Transformation.translation(-center.getX(), -center.getY()));
     }
 
+    public static inverseTransformationMatrix(
+        width: number,
+        height: number,
+        tx: number,
+        ty: number,
+        degree: number,
+        sx: number,
+        sy: number,
+        kx: number,
+        ky: number,
+        center: Point
+    ) : Matrix {
+        return Transformation.translation(center.getX(), center.getY())
+        .multiplyMatrix(Transformation.shearY(-ky))
+        .multiplyMatrix(Transformation.shearX(-kx))
+        .multiplyMatrix(Transformation.scale(1 / sx, 1 / sy))
+        .multiplyMatrix(Transformation.rotation(-degree))
+        .multiplyMatrix(Transformation.translation(-center.getX(), -center.getY()))
+        .multiplyMatrix(Transformation.translation(-tx, -ty))
+        // .multiplyMatrix(Transformation.projection(1 / width, 1 / height));
+    }
+
 }
 export default Transformation;

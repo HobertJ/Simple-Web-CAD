@@ -49,19 +49,25 @@ class Polygon extends Shape implements Renderable, Transformable {
     }
 
     public isDrawable(): boolean {
-        return this.arrayOfPoints.length >= 3;
+        return this.arrayOfPoints.length >= 2;
     }
 
     public draw (point: Point): void {
-        this.arrayOfPoints = convexHull([...this.arrayOfPoints, point]);
+        if (this.arrayOfPoints.length >= 3) {
+            this.arrayOfPoints = convexHull([...this.arrayOfPoints, point]);
+        } else {
+            this.arrayOfPoints[this.arrayOfPoints.length] = point;
+        }
+        this.center = this.getCenter();
+        
     }
 
     public drawMethod(gl: WebGLRenderingContext): number {
-        return this.isDrawable() ? gl.TRIANGLE_FAN : gl.LINES;
+        return this.arrayOfPoints.length >=3 ? gl.TRIANGLE_FAN : gl.LINES;
     }
 
     public getNumberOfVerticesToBeDrawn(): number {
-        return this.arrayOfPoints.length + 1;
+        return this.arrayOfPoints.length ;
     }
 
     public addPosition(gl: WebGLRenderingContext): void {

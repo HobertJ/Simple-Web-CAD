@@ -109,6 +109,7 @@ const listOfShapes = document.getElementById("list-of-shapes") as HTMLSelectElem
 listOfShapes.addEventListener("change", () => {
   renderAll(gl, programInfo, shapes, positionBuffer, colorBuffer);
   const index: number = +listOfShapes.selectedOptions[0].value;
+  isDrawing = false;
 
   setupSelector(gl, programInfo, shapes[index]);
 });
@@ -177,20 +178,38 @@ canvas.addEventListener("mousedown", (event) => {
       isDrawing = false;
       currentObject = null;
     } else {
-      currentObject.draw(point);
       if (currentObject.id == shapes.length) {
+        currentObject.draw(point);
         // belum dipush ke shapes
-        if (currentObject.isDrawable()) {
+        if (currentObject.arrayOfPoints.length >=3) {
           setupOption(true, currentObject);
           // render(gl, programInfo, currentObject, positionBuffer, colorBuffer);
+          shapes.push(currentObject);
           renderAll(gl, programInfo, shapes, positionBuffer, colorBuffer);
           isDrawing = false;
+          currentObject = null;
+        } else {
+          renderAll(gl, programInfo, shapes, positionBuffer, colorBuffer);
+          render(gl, programInfo, currentObject, positionBuffer, colorBuffer);
         }
       } else {
-        setupOption(true, currentObject);
+        const matrix = Transformation.inverseTransformationMatrix(
+          gl.canvas.width,
+          gl.canvas.height,
+          currentObject.tx,
+          currentObject.ty,
+          currentObject.degree,
+          currentObject.sx,
+          currentObject.sy,
+          currentObject.kx,
+          currentObject.ky,
+          currentObject.center
+        );
+        const point2 = matrix.multiplyPoint(point);
+        currentObject.draw(point2);
+        setupOption(false, currentObject);
         // render(gl, programInfo, currentObject, positionBuffer, colorBuffer);
         renderAll(gl, programInfo, shapes, positionBuffer, colorBuffer);
-        isDrawing = false;
       }
     }
   } else {
@@ -216,15 +235,13 @@ canvas.addEventListener("mousedown", (event) => {
 });
 
 canvas.addEventListener("mousemove", (event) => {
-  if (isDrawing) {
+  if (isDrawing && currentObject.type !== Type.Polygon) {
     const x = event.clientX;
     const y = event.clientY;
     const point = new Point([x, y]);
-    if (currentObject.type !== Type.Polygon) {
-      currentObject.draw(point);
-      renderAll(gl, programInfo, shapes, positionBuffer, colorBuffer);
-      render(gl, programInfo, currentObject, positionBuffer, colorBuffer);
-    }
+    currentObject.draw(point);
+    renderAll(gl, programInfo, shapes, positionBuffer, colorBuffer);
+    render(gl, programInfo, currentObject, positionBuffer, colorBuffer);
   }
 });
 
@@ -433,6 +450,30 @@ function setupSelector(
     newPoint.text = "point_" + i;
     pointPicker.appendChild(newPoint);
   }
+
+  // If the currentObject is not of type Polygon, remove the button
+  const addPointButton = document.getElementById("btn-add-point");
+  if (addPointButton) {
+    addPointButton.remove();
+  }
+
+  if (element instanceof Polygon) {
+    const addPointButton = document.createElement("button");
+    addPointButton.textContent = "Add New Point";
+    addPointButton.className = "btn btn-primary";
+    addPointButton.id = "btn-add-point";
+    addPointButton.addEventListener("click", () => {
+      // Set a flag to indicate that a new point is being added
+      isDrawing = true;
+      currentObject = shapes[element.id]
+    });
+
+    // Append the button to the DOM
+    const leftPanel = document.querySelector(".left-panel");
+    if (leftPanel) {
+      leftPanel.appendChild(addPointButton);
+    }
+  } 
 }
 
 function setupColorPicker(
