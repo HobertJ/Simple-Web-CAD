@@ -107,6 +107,7 @@ let currentObject: Shape & Renderable & Transformable;
 /* List of Shapes Listener */
 const listOfShapes = document.getElementById("list-of-shapes") as HTMLSelectElement;
 listOfShapes.addEventListener("change", () => {
+  renderAll(gl, programInfo, shapes, positionBuffer, colorBuffer);
   const index: number = +listOfShapes.selectedOptions[0].value;
 
   setupSelector(gl, programInfo, shapes[index]);
@@ -115,24 +116,28 @@ listOfShapes.addEventListener("change", () => {
 /* Button Listener */
 const lineBtn = document.getElementById("line-btn");
 lineBtn.addEventListener("click", () => {
+  renderAll(gl, programInfo, shapes, positionBuffer, colorBuffer);
   type = Type.Line;
   isDrawing = false;
 });
 
 const squareBtn = document.getElementById("square-btn");
 squareBtn.addEventListener("click", () => {
+  renderAll(gl, programInfo, shapes, positionBuffer, colorBuffer);
   type = Type.Square;
   isDrawing = false;
 });
 
 const rectangleBtn = document.getElementById("rectangle-btn");
 rectangleBtn.addEventListener("click", () => {
+  renderAll(gl, programInfo, shapes, positionBuffer, colorBuffer);
   type = Type.Rectangle;
   isDrawing = false;
 });
 
 const polygonBtn = document.getElementById("polygon-btn");
 polygonBtn.addEventListener("click", () => {
+  renderAll(gl, programInfo, shapes, positionBuffer, colorBuffer);
   type = Type.Polygon;
   isDrawing = false;
   // isFirstDrawing = true;
@@ -140,6 +145,7 @@ polygonBtn.addEventListener("click", () => {
 
 const saveBtn = document.getElementById("save-btn");
 saveBtn.addEventListener("click", () => {
+  renderAll(gl, programInfo, shapes, positionBuffer, colorBuffer);
   const text = storeShapes(shapes);
   handleDownload(text);
 });
@@ -167,7 +173,7 @@ canvas.addEventListener("mousedown", (event) => {
     if (currentObject.type !== Type.Polygon) {
       currentObject.draw(point);
       setupOption(true, currentObject);
-      renderAll(gl, programInfo, shapes, positionBuffer, colorBuffer);
+      shapes.push(currentObject);
       isDrawing = false;
       currentObject = null;
     } else {
@@ -206,19 +212,18 @@ canvas.addEventListener("mousedown", (event) => {
         isDrawing = true;
         break;
     }
-    shapes.push(currentObject);
   }
 });
 
 canvas.addEventListener("mousemove", (event) => {
-  const x = event.clientX;
-  const y = event.clientY;
-  const point = new Point([x, y]);
-
   if (isDrawing) {
+    const x = event.clientX;
+    const y = event.clientY;
+    const point = new Point([x, y]);
     if (currentObject.type !== Type.Polygon) {
       currentObject.draw(point);
       renderAll(gl, programInfo, shapes, positionBuffer, colorBuffer);
+      render(gl, programInfo, currentObject, positionBuffer, colorBuffer);
     }
   }
 });

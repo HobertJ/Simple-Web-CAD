@@ -10,6 +10,4 @@ export function renderAll(gl: WebGLRenderingContext, programInfo: ProgramInfo, s
     for (const shape of shapes) {
       render(gl, programInfo, shape, positionBuffer, colorBuffer)
     }
-  
-    window.requestAnimationFrame(() => renderAll(gl, programInfo, shapes, positionBuffer, colorBuffer));
-  };
+};
