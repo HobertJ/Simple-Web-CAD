@@ -13,6 +13,8 @@
       "Shapes/*": ["./src/2D-Shapes/*"],
       "Base/*": ["./src/Base/*"],
       "Operations/*": ["./src/Operations/*"],
+      "Functions/*": ["./src/Functions/*"],
+      "Utils/*": ["./src/Utils/*"],
     }
   }
 }

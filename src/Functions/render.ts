@@ -7,7 +7,6 @@ export function render(gl: WebGLRenderingContext, programInfo: ProgramInfo, obje
       return;
     }
     // Add Position to gl buffer
-    // console.log("kontolodon3");
     gl.enableVertexAttribArray(programInfo.attribLocations.vertexPosition);
     gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
     object.addPosition(gl);
@@ -52,6 +51,5 @@ export function render(gl: WebGLRenderingContext, programInfo: ProgramInfo, obje
     const primitiveType = object.drawMethod(gl);
     // const offset = 0;
     const numberOfVerticesToBeDrawn = object.getNumberOfVerticesToBeDrawn();
-    // console.log("kontolodon5");
     gl.drawArrays(primitiveType, offset, numberOfVerticesToBeDrawn);
 }

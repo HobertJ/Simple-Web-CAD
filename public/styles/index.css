@@ -115,3 +115,9 @@ body{
     width: 225px;
     margin-bottom: 15px;
 }
+
+.polygon-btn-section{
+    display: flex;
+    margin-top : 15px;
+    gap: 10px;
+}

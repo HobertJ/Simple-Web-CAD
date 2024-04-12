@@ -24,6 +24,8 @@ module.exports = {
             Operations : path.resolve(__dirname, 'src/Operations/'),
             Shapes: path.resolve(__dirname, 'src/2D-Shapes/'),
             Base: path.resolve(__dirname, 'src/Base/'),
+            Functions: path.resolve(__dirname, 'src/Functions/'),
+            Utils: path.resolve(__dirname, 'src/Utils/'),
         }
     },
     devServer: {

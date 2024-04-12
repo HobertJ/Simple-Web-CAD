@@ -29,7 +29,6 @@ class Polygon extends Shape implements Renderable, Transformable {
         this.sy = 1;
         this.kx = 0;
         this.ky = 0;
-
     }
 
     public getCenter(): Point {
@@ -59,7 +58,6 @@ class Polygon extends Shape implements Renderable, Transformable {
             this.arrayOfPoints[this.arrayOfPoints.length] = point;
         }
         this.center = this.getCenter();
-        
     }
 
     public drawMethod(gl: WebGLRenderingContext): number {
@@ -154,6 +152,8 @@ class Polygon extends Shape implements Renderable, Transformable {
         this.sy = sy;
         this.kx = kx;
         this.ky = ky;
+        this.numberOfVertices = arrayOfPoints.length;
+        this.center = this.getCenter();
       }
     
 }

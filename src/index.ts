@@ -16,7 +16,6 @@ import { hexToRgb, rgbToHex } from "./Utils/tools";
 import { render } from "./Functions/render";
 import { renderAll } from "./Functions/render-all";
 
-// const gl = setupCanvas()
 const canvas = document.querySelector("#canvas") as HTMLCanvasElement;
 // Initialize the GL context
 const gl = canvas.getContext("webgl");
@@ -252,7 +251,7 @@ function setupOption(
   const option = document.createElement("option");
   option.value = element.id.toString();
   let optionText: string;
-  switch (type) {
+  switch (element.type) {
     case Type.Line:
       optionText = `Line_${element.id}`;
       break;
@@ -343,6 +342,9 @@ function setupSelector(
   sliderLength.addEventListener("input", (event) => {
     const deltaLength = (event.target as HTMLInputElement).value;
     element.sx = 1 + Number(deltaLength) / length;
+    if (element.type == Type.Square){
+      element.sy = 1 + Number(deltaLength) / length;
+    }
     renderAll(gl, programInfo, shapes, positionBuffer, colorBuffer);
   });
 
@@ -351,6 +353,9 @@ function setupSelector(
   ) as HTMLInputElement;
   const sliderWidth = sliderWidth_original.cloneNode(true) as HTMLInputElement;
   sliderWidth_original.parentNode.replaceChild(sliderWidth, sliderWidth_original);
+  if(element.type == Type.Line || element.type == Type.Square) {
+    sliderWidth.disabled = true;
+  }
   sliderWidth.min = "0";
   sliderWidth.max = "600";
   let width: number;
@@ -460,7 +465,7 @@ function setupSelector(
   if (element instanceof Polygon) {
     const addPointButton = document.createElement("button");
     addPointButton.textContent = "Add New Point";
-    addPointButton.className = "btn btn-primary";
+    addPointButton.className = "btn btn-primary add-btn";
     addPointButton.id = "btn-add-point";
     addPointButton.addEventListener("click", () => {
       // Set a flag to indicate that a new point is being added
@@ -469,9 +474,9 @@ function setupSelector(
     });
 
     // Append the button to the DOM
-    const leftPanel = document.querySelector(".left-panel");
-    if (leftPanel) {
-      leftPanel.appendChild(addPointButton);
+    const polygonBtn = document.querySelector(".polygon-btn-section");
+    if (polygonBtn) {
+      polygonBtn.appendChild(addPointButton);
     }
   } 
 }
@@ -484,16 +489,11 @@ function setupColorPicker(
 ) {
   const colorPicker_original = document.getElementById(
     "colorPicker"
-  ) as HTMLSelectElement;
+  ) as HTMLInputElement;
   const colorPicker = colorPicker_original.cloneNode(true) as HTMLInputElement;
   const color = rgbToHex(element.arrayOfPoints[pointIndex].getColor());
   colorPicker.value = color; 
-  colorPicker.style.color = color ;
-  colorPicker.setAttribute("value", color);
-  // console.log(`color: ${color}}`)
-  console.log(`color picker value: ${colorPicker.value}`)
   colorPicker_original.parentElement.replaceChild(colorPicker, colorPicker_original);
-  // colorPicker.innerHTML = "";
 
   colorPicker.addEventListener("change", (event) => {
     const hex = (event.target as HTMLInputElement).value;
@@ -508,16 +508,16 @@ function setupColorPicker(
   if (element instanceof Polygon) {
     const deletePointButton = document.createElement("button");
     deletePointButton.textContent = "Delete Point";
-    deletePointButton.className = "btn btn-primary";
+    deletePointButton.className = "btn btn-primary delete-btn";
     deletePointButton.id = "btn-delete-point";
     deletePointButton.addEventListener("click", () => {
       element.deletePoint(pointIndex);
       renderAll(gl, programInfo, shapes, positionBuffer, colorBuffer);
     });
 
-    const bottomSection = document.querySelector(".bottom-section");
-    if (bottomSection) {
-      bottomSection.appendChild(deletePointButton);
+    const polygonBtn = document.querySelector(".polygon-btn-section");
+    if (polygonBtn) {
+      polygonBtn.appendChild(deletePointButton);
     }
   }
 }

@@ -1,12 +1,12 @@
-function componentToHex(c: number) {
-    var hex = c.toString(16);
-    return hex.length === 1 ? `0${hex}` : hex;
-}
-  
-function rgbToHex(rgba: [number, number, number, number]): string {
-    const [r, g, b] = rgba;
-  
-    return `#${componentToHex(r)}${componentToHex(g)}${componentToHex(b)}`;
+function rgbToHex(rgba : [number, number, number, number]) {
+    const hexR = (rgba[0] * 255).toString(16).padStart(2, '0');
+    const hexG = (rgba[1] * 255).toString(16).padStart(2, '0');
+    const hexB = (rgba[2] * 255).toString(16).padStart(2, '0');
+
+    // Concatenate the hexadecimal components
+    const hexColor = `#${hexR}${hexG}${hexB}`;
+
+    return hexColor;
 }
   
 function hexToRgb(hex: string): [number, number, number, number] {
