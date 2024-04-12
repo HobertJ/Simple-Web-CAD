@@ -482,33 +482,43 @@ function setupColorPicker(
   pointIndex: number,
   element: Renderable & Transformable & Shape
 ) {
-  const colorSelector = document.getElementById("color-picker");
-  colorSelector.innerHTML = "";
-  colorSelector.replaceChildren();
+  const colorPicker_original = document.getElementById(
+    "colorPicker"
+  ) as HTMLSelectElement;
+  const colorPicker = colorPicker_original.cloneNode(true) as HTMLInputElement;
+  const color = rgbToHex(element.arrayOfPoints[pointIndex].getColor());
+  colorPicker.value = color; 
+  colorPicker.style.color = color ;
+  colorPicker.setAttribute("value", color);
+  // console.log(`color: ${color}}`)
+  console.log(`color picker value: ${colorPicker.value}`)
+  colorPicker_original.parentElement.replaceChild(colorPicker, colorPicker_original);
+  // colorPicker.innerHTML = "";
 
-  const colorTitle = document.createElement("h2");
-  colorTitle.textContent = "Select color";
-
-  const colorInput = document.createElement("input");
-  colorInput.id = "color-input";
-  colorInput.type = "color";
-
-  colorInput.value = rgbToHex(element.arrayOfPoints[pointIndex].getColor());
-  colorInput.addEventListener("change", (event) => {
+  colorPicker.addEventListener("change", (event) => {
     const hex = (event.target as HTMLInputElement).value;
-
     element.arrayOfPoints[pointIndex].setColor(hexToRgb(hex));
+    renderAll(gl, programInfo, shapes, positionBuffer, colorBuffer);
   });
 
+  const deletePointButton = document.getElementById("btn-delete-point");
+  if (deletePointButton) {
+    deletePointButton.remove();
+  }
   if (element instanceof Polygon) {
     const deletePointButton = document.createElement("button");
-    deletePointButton.textContent = "delete point";
-    deletePointButton.className = "btn";
+    deletePointButton.textContent = "Delete Point";
+    deletePointButton.className = "btn btn-primary";
+    deletePointButton.id = "btn-delete-point";
     deletePointButton.addEventListener("click", () => {
       element.deletePoint(pointIndex);
       renderAll(gl, programInfo, shapes, positionBuffer, colorBuffer);
     });
-    colorSelector.append(colorTitle, colorInput, deletePointButton);
+
+    const bottomSection = document.querySelector(".bottom-section");
+    if (bottomSection) {
+      bottomSection.appendChild(deletePointButton);
+    }
   }
 }
 
