@@ -1,4 +1,4 @@
-import ProgramInfo from "./program-info.interface";
+import ProgramInfo from "Functions/program-info.interface";
 
 
 // Tell WebGL how to pull out the positions from the position buffer into the vertexPosition attribute.

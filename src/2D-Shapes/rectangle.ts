@@ -1,9 +1,9 @@
 import Shape from "Shapes/shape";
 import Point from "Base/point";
 import Type from "Shapes/type.enum";
-import Renderable from "Main/2D-Shapes/Interfaces/renderable.interface";
-import Transformable from "Shapes/Interfaces/transformable.interface";
-import Transformation from "Main/Operations/Transformation";
+import Renderable from "Interfaces/renderable.interface";
+import Transformable from "Interfaces/transformable.interface";
+import Transformation from "Operations/Transformation";
 
 class Rectangle extends Shape implements Renderable, Transformable {
     public arrayOfPoints: Point[];

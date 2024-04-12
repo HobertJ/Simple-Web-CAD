@@ -1,4 +1,4 @@
-import { loadShader } from "./load-shader";
+import { loadShader } from "Functions/load-shader";
 
 //
 // Initialize a shader program, so WebGL knows how to draw our data

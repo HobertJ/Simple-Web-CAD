@@ -1,20 +1,20 @@
-import Renderable from "./2D-Shapes/Interfaces/renderable.interface";
-import Transformable from "./2D-Shapes/Interfaces/transformable.interface";
-import Shape from "./2D-Shapes/shape";
-import Line from "./2D-Shapes/line";
-import Square from "./2D-Shapes/square";
-import Rectangle from "./2D-Shapes/rectangle";
-import Point from "./Base/point";
-import Polygon from "./2D-Shapes/polygon";
-import Type from "./2D-Shapes/type.enum";
-import { createShaderProgram } from "./Functions/create-shader-program";
-import ProgramInfo from "./Functions/program-info.interface";
+import Renderable from "Interfaces/renderable.interface";
+import Transformable from "Interfaces/transformable.interface";
+import Shape from "Shapes/shape";
+import Line from "Shapes/line";
+import Square from "Shapes/square";
+import Rectangle from "Shapes/rectangle";
+import Point from "Base/point";
+import Polygon from "Shapes/polygon";
+import Type from "Shapes/type.enum";
+import { createShaderProgram } from "Functions/create-shader-program";
+import ProgramInfo from "Functions/program-info.interface";
 import { setAttributes } from "./Functions/set-attributes";
 import { setupCanvas } from "./Functions/setup-canvas";
-import Transformation from "./Operations/Transformation";
-import { hexToRgb, rgbToHex } from "./Utils/tools";
-import { render } from "./Functions/render";
-import { renderAll } from "./Functions/render-all";
+import Transformation from "Operations/Transformation";
+import { hexToRgb, rgbToHex } from "Utils/tools";
+import { render } from "Functions/render";
+import { renderAll } from "Functions/render-all";
 
 const canvas = document.querySelector("#canvas") as HTMLCanvasElement;
 // Initialize the GL context

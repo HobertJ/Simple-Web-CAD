@@ -1,10 +1,10 @@
-import Transformation from "Main/Operations/Transformation";
-import Renderable from "./Interfaces/renderable.interface";
-import Transformable from "./Interfaces/transformable.interface";
-import Shape from "./shape";
-import Type from "./type.enum";
-import Point from "Main/Base/point";
-import convexHull from "Main/Operations/convex-hull";
+import Transformation from "Operations/Transformation";
+import Renderable from "Interfaces/renderable.interface";
+import Transformable from "Interfaces/transformable.interface";
+import Shape from "Shapes/shape";
+import Type from "Shapes/type.enum";
+import Point from "Base/point";
+import convexHull from "Operations/convex-hull";
 
 class Polygon extends Shape implements Renderable, Transformable {
     public type: Type.Polygon;

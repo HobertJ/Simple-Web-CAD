@@ -1,4 +1,3 @@
-import Coordinate from 'Base/coordinate';
 import Point from 'Base/point';
 
 class Matrix {

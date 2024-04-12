@@ -1,6 +1,6 @@
-import Renderable from "Main/2D-Shapes/Interfaces/renderable.interface";
-import ProgramInfo from "./program-info.interface";
-import Transformable from "Main/2D-Shapes/Interfaces/transformable.interface";
+import Renderable from "Interfaces/renderable.interface";
+import ProgramInfo from "Functions/program-info.interface";
+import Transformable from "Interfaces/transformable.interface";
 
 export function render(gl: WebGLRenderingContext, programInfo: ProgramInfo, object: Renderable & Transformable, positionBuffer: WebGLBuffer, colorBuffer: WebGLBuffer): void {
     if (!object.isDrawable()) {

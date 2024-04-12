@@ -15,6 +15,7 @@
       "Operations/*": ["./src/Operations/*"],
       "Functions/*": ["./src/Functions/*"],
       "Utils/*": ["./src/Utils/*"],
+      "Interfaces/*": ["./src/2D-Shapes/Interfaces/*"],
     }
   }
 }

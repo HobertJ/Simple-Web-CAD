@@ -1,4 +1,4 @@
-import Coordinate from "./coordinate";
+import Coordinate from "Base/coordinate";
 
 class Point  extends Coordinate {
     public r: number;

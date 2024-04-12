@@ -1,4 +1,4 @@
-import Point from "../../Base/point";
+import Point from "Base/point";
 
 interface Renderable {
     drawMethod(gl: WebGLRenderingContext): number;

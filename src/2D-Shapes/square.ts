@@ -1,9 +1,9 @@
-import Renderable from "./Interfaces/renderable.interface";
-import Shape from "./shape";
-import Transformation from "Main/Operations/Transformation";
-import Transformable from "./Interfaces/transformable.interface";
-import Point from "../Base/point";
-import Type from "./type.enum";
+import Renderable from "Interfaces/renderable.interface";
+import Shape from "Shapes/shape";
+import Transformation from "Operations/Transformation";
+import Transformable from "Interfaces/transformable.interface";
+import Point from "Base/point";
+import Type from "Shapes/type.enum";
 
 class Square extends Shape implements Renderable, Transformable {
   public center: Point;

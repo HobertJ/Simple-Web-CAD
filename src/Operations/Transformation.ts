@@ -1,5 +1,5 @@
-import Matrix from "Main/Base/matrix";
-import Point from "Main/Base/point";
+import Matrix from "Base/matrix";
+import Point from "Base/point";
 
 
 class Transformation{

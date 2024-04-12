@@ -1,5 +1,3 @@
-
-
 export function setupCanvas(): WebGLRenderingContext{
     // Get canvas form index.html
     const canvas = document.querySelector("#glcanvas") as HTMLCanvasElement;
