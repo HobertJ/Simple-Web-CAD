@@ -355,6 +355,8 @@ function setupSelector(
   sliderWidth_original.parentNode.replaceChild(sliderWidth, sliderWidth_original);
   if(element.type == Type.Line || element.type == Type.Square) {
     sliderWidth.disabled = true;
+  } else {
+    sliderWidth.disabled = false;
   }
   sliderWidth.min = "0";
   sliderWidth.max = "600";
@@ -378,7 +380,7 @@ function setupSelector(
         max = pY;
       }
     }
-    length = max - min;
+    width = max - min;
   } 
   sliderWidth.value = ((element.sy - 1) * width).toString();
   sliderWidth.addEventListener("input", (event) => {
@@ -479,6 +481,7 @@ function setupSelector(
       polygonBtn.appendChild(addPointButton);
     }
   } 
+  setupColorPicker(gl, programInfo, 0, element);
 }
 
 function setupColorPicker(
