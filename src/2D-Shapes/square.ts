@@ -141,6 +141,7 @@ class Square extends Shape implements Renderable, Transformable {
     this.sy = sy;
     this.kx = kx;
     this.ky = ky;
+    this.center = this.getCenter();
   }
 }
 
