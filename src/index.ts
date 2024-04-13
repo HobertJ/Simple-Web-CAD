@@ -529,6 +529,13 @@ function setupColorPicker(
 function loadShape(text: string): (Shape & Renderable & Transformable)[] {
   const shape: (Shape & Renderable & Transformable)[] = [];
   const data = JSON.parse(text);
+  const listOfShapes = document.getElementById("list-of-shapes") as HTMLSelectElement;
+  
+  // clear the list of shapes option
+  while(listOfShapes.firstChild) {
+    listOfShapes.removeChild(listOfShapes.firstChild);
+  }
+
   for (const item of data) {
     const tx = item.tx;
     const ty = item.ty;
