@@ -58,11 +58,6 @@ h2 {
     margin-bottom: 15px;
 }
 
-.dropdown-menu{
-    max-height: 200px;
-    overflow-y: auto;
-}
-
 .slider-container {
     display: flex;
     align-items: center;

@@ -17,25 +17,6 @@
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Reddit+Mono:wght@200..900&display=swap"
       rel="stylesheet"
     />
-    <script type="notjs" id="vertex-shader">
-      attribute vec4 aVertexPosition;
-      uniform mat4 uModelViewMatrix;
-      uniform mat4 uProjectionMatrix;
-
-      void main() {
-      gl_Position = uProjectionMatrix * uModelViewMatrix * aVertexPosition;
-      }
-    </script>
-
-    <script type="notjs" id="fragment-shader">
-      precision mediump float;
-
-      varying vec4 v_color;
-
-      void main() {
-          gl_FragColor = v_color;
-      }
-    </script>
     <title>Paint</title>
   </head>
   <body>
