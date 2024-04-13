@@ -544,7 +544,6 @@ function loadShape(text: string): (Shape & Renderable & Transformable)[] {
     const sy = item.sy;
     const kx = item.kx;
     const ky = item.ky;
-    const center = new Point([item.center.x, item.center.y]);
     let arrayOfPoints: Point[] = [];
     for (const point of item.arrayOfPoints) {
       let p = new Point(
@@ -569,7 +568,7 @@ function loadShape(text: string): (Shape & Renderable & Transformable)[] {
         shape.push(line);
         break;
       case Type.Square:
-        const square = new Square(item.id, center);
+        const square = new Square(item.id, new Point([item.center.x, item.center.y]));
         square.setSquareAttributes(
           tx,
           ty,
