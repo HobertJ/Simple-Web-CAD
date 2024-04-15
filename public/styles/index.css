@@ -15,6 +15,15 @@
     position: absolute;
     box-shadow: 0 3px 10px rgb(0 0 0 / 0.8);
 }
+.select-shapes{
+    display: flex;
+}
+#selection-of-shapes1, #selection-of-shapes2 {
+    margin-top: 10px;
+    width: 175px;
+    margin-bottom: 15px;
+}
+
 
 h2 {
     color: #3D405B;

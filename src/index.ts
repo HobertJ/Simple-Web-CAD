@@ -6,6 +6,7 @@ import Square from "Shapes/square";
 import Rectangle from "Shapes/rectangle";
 import Point from "Base/point";
 import Polygon from "Shapes/polygon";
+import Unigon from "Shapes/unigon";
 import Type from "Shapes/type.enum";
 import { createShaderProgram } from "Functions/create-shader-program";
 import ProgramInfo from "Functions/program-info.interface";
@@ -113,6 +114,16 @@ listOfShapes.addEventListener("change", () => {
   setupSelector(gl, programInfo, shapes[index]);
 });
 
+const unionBtn = document.getElementById("union-btn");
+unionBtn.addEventListener("click", () => {
+  const object1 : Shape&Renderable&Transformable  = shapes[Number(selectionOfShapes1.value)];
+  const object2 : Shape&Renderable&Transformable  = shapes[Number(selectionOfShapes2.value)];
+  union(object1, object2);
+});
+
+const selectionOfShapes1 = document.getElementById("selection-of-shapes1") as HTMLSelectElement;
+const selectionOfShapes2 = document.getElementById("selection-of-shapes2") as HTMLSelectElement;
+
 /* Button Listener */
 const lineBtn = document.getElementById("line-btn");
 lineBtn.addEventListener("click", () => {
@@ -170,7 +181,7 @@ canvas.addEventListener("mousedown", (event) => {
   const point = new Point([x, y]);
 
   if (isDrawing) {
-    if (currentObject.type !== Type.Polygon) {
+    if (currentObject.type !== Type.Polygon && currentObject.type !== Type.Unigon) {
       currentObject.draw(point);
       setupOption(true, currentObject);
       shapes.push(currentObject);
@@ -234,7 +245,7 @@ canvas.addEventListener("mousedown", (event) => {
 });
 
 canvas.addEventListener("mousemove", (event) => {
-  if (isDrawing && currentObject.type !== Type.Polygon) {
+  if (isDrawing && currentObject.type !== Type.Polygon && currentObject.type !== Type.Unigon) {
     const x = event.clientX;
     const y = event.clientY;
     const point = new Point([x, y]);
@@ -248,8 +259,15 @@ function setupOption(
   isFirstDrawing: boolean,
   element: Renderable & Transformable & Shape
 ): void {
-  const option = document.createElement("option");
-  option.value = element.id.toString();
+  const option1 = document.createElement("option");
+  const option2 = document.createElement("option");
+  const option3 = document.createElement("option");
+
+  option1.value = element.id.toString();
+  option2.value = element.id.toString();
+  option3.value = element.id.toString();
+
+  
   let optionText: string;
   switch (element.type) {
     case Type.Line:
@@ -264,15 +282,32 @@ function setupOption(
     case Type.Polygon:
       optionText = `Polygon_${element.id}`;
       break;
+    case Type.Unigon:
+      optionText = `Unigon_${element.id}`;
+      break;
   }
-  option.text = optionText;
+  option1.text = optionText;
+  option2.text = optionText;
+  option3.text = optionText;
+
 
   if (isFirstDrawing) {
     const listOfShapes = document.getElementById(
       "list-of-shapes"
     ) as HTMLSelectElement;
-    listOfShapes.appendChild(option);
+    const selectionOfShapes1 = document.getElementById(
+      "selection-of-shapes1"
+    ) as HTMLSelectElement;
+    const selectionOfShapes2 = document.getElementById(
+      "selection-of-shapes2"
+    ) as HTMLSelectElement;
+
+    listOfShapes.appendChild(option1);
+    selectionOfShapes1.appendChild(option2);
+    selectionOfShapes2.appendChild(option3);
     listOfShapes.value = element.id.toString();
+    selectionOfShapes1.value = element.id.toString();
+    selectionOfShapes2.value = element.id.toString();
   }
 
   setupSelector(gl, programInfo, element);
@@ -318,7 +353,7 @@ function setupSelector(
   sliderLength.min = "0";
   sliderLength.max = "600";
   let length: number;
-  if (element.type === Type.Polygon) {
+  if (element.type === Type.Polygon || element.type === Type.Unigon) {
     let min = Infinity;
     let max = -Infinity;
 
@@ -367,7 +402,7 @@ function setupSelector(
       (element.arrayOfPoints[0].x - element.arrayOfPoints[3].x) ** 2 +
         (element.arrayOfPoints[0].y - element.arrayOfPoints[3].y) ** 2
     );
-  } else if (element.type == Type.Polygon) {
+  } else if (element.type == Type.Polygon || element.type == Type.Unigon) {
     let min = Infinity;
     let max = -Infinity;
 
@@ -464,7 +499,7 @@ function setupSelector(
     addPointButton.remove();
   }
 
-  if (element instanceof Polygon) {
+  if (element instanceof Polygon || element instanceof Unigon) {
     const addPointButton = document.createElement("button");
     addPointButton.textContent = "Add New Point";
     addPointButton.className = "btn btn-primary add-btn";
@@ -508,7 +543,7 @@ function setupColorPicker(
   if (deletePointButton) {
     deletePointButton.remove();
   }
-  if (element instanceof Polygon) {
+  if (element instanceof Polygon || element instanceof Unigon) {
     const deletePointButton = document.createElement("button");
     deletePointButton.textContent = "Delete Point";
     deletePointButton.className = "btn btn-primary delete-btn";
@@ -530,10 +565,15 @@ function loadShape(text: string): (Shape & Renderable & Transformable)[] {
   const shape: (Shape & Renderable & Transformable)[] = [];
   const data = JSON.parse(text);
   const listOfShapes = document.getElementById("list-of-shapes") as HTMLSelectElement;
+  const selectionOfShapes1 = document.getElementById("selection-of-shapes1") as HTMLSelectElement;
+  const selectionOfShapes2 = document.getElementById("selection-of-shapes2") as HTMLSelectElement;
+
   
   // clear the list of shapes option
   while(listOfShapes.firstChild) {
     listOfShapes.removeChild(listOfShapes.firstChild);
+    selectionOfShapes1.removeChild(selectionOfShapes1.firstChild);
+    selectionOfShapes2.removeChild(selectionOfShapes2.firstChild);
   }
 
   for (const item of data) {
@@ -609,6 +649,20 @@ function loadShape(text: string): (Shape & Renderable & Transformable)[] {
         );
         shape.push(polygon);
         break;
+      case Type.Unigon:
+        const unigon = new Unigon(item.id, arrayOfPoints[0]);
+        unigon.setUnigonAttributes(
+          tx,
+          ty,
+          degree,
+          sx,
+          sy,
+          kx,
+          ky,
+          arrayOfPoints
+        );
+        shape.push(unigon);
+        break;
     }
   }
   return shape;
@@ -650,4 +704,61 @@ function handleUpload(callback: (text: string) => void): void {
   document.body.appendChild(input);
   input.click();
   document.body.removeChild(input);
+}
+
+function union(object1 : Shape&Renderable&Transformable, object2 : Shape&Renderable&Transformable) {
+  currentObject = new Unigon(shapes.length, object1.arrayOfPoints[0]);
+
+
+  currentObject.arrayOfPoints = [];
+  const matrix1 = Transformation.transformationMatrixWithoutProjection(
+    gl.canvas.width,
+    gl.canvas.height,
+    object1.tx,
+    object1.ty,
+    object1.degree,
+    object1.sx,
+    object1.sy,
+    object1.kx,
+    object1.ky,
+    object1.center
+  );
+  const matrix2 = Transformation.transformationMatrixWithoutProjection(
+    gl.canvas.width,
+    gl.canvas.height,
+    object2.tx,
+    object2.ty,
+    object2.degree,
+    object2.sx,
+    object2.sy,
+    object2.kx,
+    object2.ky,
+    object2.center
+  );
+
+  for (const point of object1.arrayOfPoints) {
+    const newPoint = matrix1.multiplyPoint(point);
+    currentObject.arrayOfPoints.push(newPoint);
+  }
+  
+  for (const point of object2.arrayOfPoints) {
+    const newPoint = matrix2.multiplyPoint(point);
+    currentObject.arrayOfPoints.push(newPoint);
+  }
+  
+  (currentObject as Unigon).setUnigonAttributes(
+    0,
+    0,
+    0,
+    1,
+    1,
+    0,
+    0,
+    currentObject.arrayOfPoints
+  );
+  shapes.push(currentObject);
+
+  setupOption(true, currentObject);
+  
+  renderAll(gl, programInfo, shapes, positionBuffer, colorBuffer);
 }

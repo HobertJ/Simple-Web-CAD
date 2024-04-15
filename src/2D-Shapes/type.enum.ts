@@ -2,7 +2,8 @@ enum Type {
     Line,
     Rectangle,
     Square,
-    Polygon
+    Polygon,
+    Unigon
 }
 
 export default Type;
