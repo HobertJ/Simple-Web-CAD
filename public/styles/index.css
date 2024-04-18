@@ -19,13 +19,16 @@
     display: flex;
 }
 #selection-of-shapes1, #selection-of-shapes2 {
-    margin-top: 10px;
-    width: 175px;
+    margin-top: 20px;
+    width: 150px;
     margin-bottom: 15px;
 }
 
+#selection-of-shapes1 {
+    margin-right: 10px;
+}
 
-h2 {
+h3 {
     color: #3D405B;
     margin-top: 20px;
     margin-bottom: 20px;
