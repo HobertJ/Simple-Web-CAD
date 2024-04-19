@@ -28,7 +28,6 @@ if (gl === null) {
   );
 }
 
-
 // Vertex shader program
 const vsSource = `
     attribute vec2 aVertexPosition;
@@ -80,7 +79,6 @@ canvas.height = height;
 gl.clearColor(1.0, 1.0, 1.0, 1.0);
 // Clear the color buffer with specified clear color
 
-
 gl.viewport(0, 0, gl.canvas.width, gl.canvas.height); // sets the viewport to cover the entire canvas, starting from the lower-left corner and extending to the canvas's width and height.
 
 // Clear the canvas before we start drawing on it.
@@ -91,7 +89,6 @@ gl.clear(gl.COLOR_BUFFER_BIT);
 let shapes: (Shape & Renderable & Transformable)[] = [];
 let type: Type;
 let isDrawing = false;
-
 /* Setup Viewport */
 
 const positionBuffer = gl.createBuffer();
@@ -105,7 +102,9 @@ let currentObject: Shape & Renderable & Transformable;
 // Fix HTML Elements Event Listeners
 
 /* List of Shapes Listener */
-const listOfShapes = document.getElementById("list-of-shapes") as HTMLSelectElement;
+const listOfShapes = document.getElementById(
+  "list-of-shapes"
+) as HTMLSelectElement;
 listOfShapes.addEventListener("change", () => {
   renderAll(gl, programInfo, shapes, positionBuffer, colorBuffer);
   const index: number = +listOfShapes.selectedOptions[0].value;
@@ -116,13 +115,19 @@ listOfShapes.addEventListener("change", () => {
 
 const unionBtn = document.getElementById("union-btn");
 unionBtn.addEventListener("click", () => {
-  const object1 : Shape&Renderable&Transformable  = shapes[Number(selectionOfShapes1.value)];
-  const object2 : Shape&Renderable&Transformable  = shapes[Number(selectionOfShapes2.value)];
+  const object1: Shape & Renderable & Transformable =
+    shapes[Number(selectionOfShapes1.value)];
+  const object2: Shape & Renderable & Transformable =
+    shapes[Number(selectionOfShapes2.value)];
   union(object1, object2);
 });
 
-const selectionOfShapes1 = document.getElementById("selection-of-shapes1") as HTMLSelectElement;
-const selectionOfShapes2 = document.getElementById("selection-of-shapes2") as HTMLSelectElement;
+const selectionOfShapes1 = document.getElementById(
+  "selection-of-shapes1"
+) as HTMLSelectElement;
+const selectionOfShapes2 = document.getElementById(
+  "selection-of-shapes2"
+) as HTMLSelectElement;
 
 /* Button Listener */
 const lineBtn = document.getElementById("line-btn");
@@ -181,7 +186,10 @@ canvas.addEventListener("mousedown", (event) => {
   const point = new Point([x, y]);
 
   if (isDrawing) {
-    if (currentObject.type !== Type.Polygon && currentObject.type !== Type.Unigon) {
+    if (
+      currentObject.type !== Type.Polygon &&
+      currentObject.type !== Type.Unigon
+    ) {
       currentObject.draw(point);
       setupOption(true, currentObject);
       shapes.push(currentObject);
@@ -191,7 +199,7 @@ canvas.addEventListener("mousedown", (event) => {
       if (currentObject.id == shapes.length) {
         currentObject.draw(point);
         // belum dipush ke shapes
-        if (currentObject.arrayOfPoints.length >=3) {
+        if (currentObject.arrayOfPoints.length >= 3) {
           setupOption(true, currentObject);
           // render(gl, programInfo, currentObject, positionBuffer, colorBuffer);
           shapes.push(currentObject);
@@ -245,7 +253,11 @@ canvas.addEventListener("mousedown", (event) => {
 });
 
 canvas.addEventListener("mousemove", (event) => {
-  if (isDrawing && currentObject.type !== Type.Polygon && currentObject.type !== Type.Unigon) {
+  if (
+    isDrawing &&
+    currentObject.type !== Type.Polygon &&
+    currentObject.type !== Type.Unigon
+  ) {
     const x = event.clientX;
     const y = event.clientY;
     const point = new Point([x, y]);
@@ -267,7 +279,6 @@ function setupOption(
   option2.value = element.id.toString();
   option3.value = element.id.toString();
 
-  
   let optionText: string;
   switch (element.type) {
     case Type.Line:
@@ -289,7 +300,6 @@ function setupOption(
   option1.text = optionText;
   option2.text = optionText;
   option3.text = optionText;
-
 
   if (isFirstDrawing) {
     const listOfShapes = document.getElementById(
@@ -318,7 +328,9 @@ function setupSelector(
   programInfo: ProgramInfo,
   element: Renderable & Transformable & Shape
 ): void {
-  const sliderX_original = document.getElementById("sliderX") as HTMLInputElement;
+  const sliderX_original = document.getElementById(
+    "sliderX"
+  ) as HTMLInputElement;
   const sliderX = sliderX_original.cloneNode(true) as HTMLInputElement;
   sliderX_original.parentNode.replaceChild(sliderX, sliderX_original);
   sliderX.min = "-600";
@@ -330,9 +342,11 @@ function setupSelector(
     const deltaX = (event.target as HTMLInputElement).value;
     element.tx = Number(deltaX);
     renderAll(gl, programInfo, shapes, positionBuffer, colorBuffer);
-  });   
+  });
 
-  const sliderY_original = document.getElementById("sliderY") as HTMLInputElement;
+  const sliderY_original = document.getElementById(
+    "sliderY"
+  ) as HTMLInputElement;
   const sliderY = sliderY_original.cloneNode(true) as HTMLInputElement;
   sliderY_original.parentNode.replaceChild(sliderY, sliderY_original);
   sliderY.min = "-600";
@@ -348,8 +362,13 @@ function setupSelector(
   const sliderLength_original = document.getElementById(
     "sliderLength"
   ) as HTMLInputElement;
-  const sliderLength = sliderLength_original.cloneNode(true) as HTMLInputElement;
-  sliderLength_original.parentNode.replaceChild(sliderLength, sliderLength_original);
+  const sliderLength = sliderLength_original.cloneNode(
+    true
+  ) as HTMLInputElement;
+  sliderLength_original.parentNode.replaceChild(
+    sliderLength,
+    sliderLength_original
+  );
   sliderLength.min = "0";
   sliderLength.max = "600";
   let length: number;
@@ -377,7 +396,7 @@ function setupSelector(
   sliderLength.addEventListener("input", (event) => {
     const deltaLength = (event.target as HTMLInputElement).value;
     element.sx = 1 + Number(deltaLength) / length;
-    if (element.type == Type.Square){
+    if (element.type == Type.Square) {
       element.sy = 1 + Number(deltaLength) / length;
     }
     renderAll(gl, programInfo, shapes, positionBuffer, colorBuffer);
@@ -387,8 +406,11 @@ function setupSelector(
     "sliderWidth"
   ) as HTMLInputElement;
   const sliderWidth = sliderWidth_original.cloneNode(true) as HTMLInputElement;
-  sliderWidth_original.parentNode.replaceChild(sliderWidth, sliderWidth_original);
-  if(element.type == Type.Line || element.type == Type.Square) {
+  sliderWidth_original.parentNode.replaceChild(
+    sliderWidth,
+    sliderWidth_original
+  );
+  if (element.type == Type.Line || element.type == Type.Square) {
     sliderWidth.disabled = true;
   } else {
     sliderWidth.disabled = false;
@@ -416,7 +438,7 @@ function setupSelector(
       }
     }
     width = max - min;
-  } 
+  }
   sliderWidth.value = ((element.sy - 1) * width).toString();
   sliderWidth.addEventListener("input", (event) => {
     const deltaWidth = (event.target as HTMLInputElement).value;
@@ -430,25 +452,39 @@ function setupSelector(
   const sliderRotation_value = document.getElementById(
     "slider-rotation-value"
   ) as HTMLInputElement;
-  const sliderRotation = sliderRotation_original.cloneNode(true) as HTMLInputElement;
-  sliderRotation_original.parentNode.replaceChild(sliderRotation, sliderRotation_original);
+  const sliderRotation = sliderRotation_original.cloneNode(
+    true
+  ) as HTMLInputElement;
+  sliderRotation_original.parentNode.replaceChild(
+    sliderRotation,
+    sliderRotation_original
+  );
   sliderRotation.min = "0";
   sliderRotation.max = "360";
   sliderRotation.value = ((180 * element.degree) / Math.PI).toString();
-  sliderRotation_value.textContent = ((180 * element.degree) / Math.PI).toFixed(0).toString(); 
+  sliderRotation_value.textContent = ((180 * element.degree) / Math.PI)
+    .toFixed(0)
+    .toString();
   sliderRotation.step = "10";
   sliderRotation.addEventListener("input", (event) => {
     const deltaDegree = (event.target as HTMLInputElement).value;
     element.degree = (Number(deltaDegree) / 180) * Math.PI;
-    sliderRotation_value.textContent = ((180 * element.degree) / Math.PI).toFixed(0).toString(); 
+    sliderRotation_value.textContent = ((180 * element.degree) / Math.PI)
+      .toFixed(0)
+      .toString();
     renderAll(gl, programInfo, shapes, positionBuffer, colorBuffer);
   });
 
   const sliderShearX_original = document.getElementById(
     "sliderShearX"
   ) as HTMLInputElement;
-  const sliderShearX = sliderShearX_original.cloneNode(true) as HTMLInputElement;
-  sliderShearX_original.parentNode.replaceChild(sliderShearX, sliderShearX_original);
+  const sliderShearX = sliderShearX_original.cloneNode(
+    true
+  ) as HTMLInputElement;
+  sliderShearX_original.parentNode.replaceChild(
+    sliderShearX,
+    sliderShearX_original
+  );
   sliderShearX.min = "0";
   sliderShearX.max = "10";
   sliderShearX.value = element.kx.toString();
@@ -463,8 +499,13 @@ function setupSelector(
   const sliderShearY_original = document.getElementById(
     "sliderShearY"
   ) as HTMLInputElement;
-  const sliderShearY = sliderShearY_original.cloneNode(true) as HTMLInputElement;
-  sliderShearY_original.parentNode.replaceChild(sliderShearY, sliderShearY_original);
+  const sliderShearY = sliderShearY_original.cloneNode(
+    true
+  ) as HTMLInputElement;
+  sliderShearY_original.parentNode.replaceChild(
+    sliderShearY,
+    sliderShearY_original
+  );
   sliderShearY.min = "0";
   sliderShearY.max = "10";
   sliderShearY.value = element.ky.toString();
@@ -479,12 +520,16 @@ function setupSelector(
   const pointPicker_original = document.getElementById(
     "pointPicker"
   ) as HTMLSelectElement;
-  const pointPicker = pointPicker_original.cloneNode(true) as HTMLSelectElement; 
-  pointPicker_original.parentElement.replaceChild(pointPicker, pointPicker_original);
+  const pointPicker = pointPicker_original.cloneNode(true) as HTMLSelectElement;
+  pointPicker_original.parentElement.replaceChild(
+    pointPicker,
+    pointPicker_original
+  );
   pointPicker.innerHTML = "";
   pointPicker.addEventListener("change", () => {
     const pointIndex: number = Number(pointPicker.value);
     setupColorPicker(gl, programInfo, pointIndex, element);
+    setupPointMoveButton(gl, programInfo, pointIndex, element);
   });
   for (let i = 0; i < element.arrayOfPoints.length; i++) {
     const newPoint = document.createElement("option");
@@ -507,7 +552,7 @@ function setupSelector(
     addPointButton.addEventListener("click", () => {
       // Set a flag to indicate that a new point is being added
       isDrawing = true;
-      currentObject = shapes[element.id]
+      currentObject = shapes[element.id];
     });
 
     // Append the button to the DOM
@@ -515,8 +560,9 @@ function setupSelector(
     if (polygonBtn) {
       polygonBtn.appendChild(addPointButton);
     }
-  } 
+  }
   setupColorPicker(gl, programInfo, 0, element);
+  setupPointMoveButton(gl, programInfo, 0, element);
 }
 
 function setupColorPicker(
@@ -530,8 +576,11 @@ function setupColorPicker(
   ) as HTMLInputElement;
   const colorPicker = colorPicker_original.cloneNode(true) as HTMLInputElement;
   const color = rgbToHex(element.arrayOfPoints[pointIndex].getColor());
-  colorPicker.value = color; 
-  colorPicker_original.parentElement.replaceChild(colorPicker, colorPicker_original);
+  colorPicker.value = color;
+  colorPicker_original.parentElement.replaceChild(
+    colorPicker,
+    colorPicker_original
+  );
 
   colorPicker.addEventListener("change", (event) => {
     const hex = (event.target as HTMLInputElement).value;
@@ -560,17 +609,115 @@ function setupColorPicker(
   }
 }
 
+function setupPointMoveButton(
+  gl: WebGLRenderingContext,
+  programInfo: ProgramInfo,
+  pointIndex: number,
+  element: Renderable & Transformable & Shape
+) {
+  let moveX: number;
+  let moveY: number;
+  const moveXPointNegative_original = document.getElementById("negativeX") as HTMLButtonElement;
+  const moveXPointPositive_original = document.getElementById("positiveX") as HTMLButtonElement;
+  const moveYPointNegative_original = document.getElementById("negativeY") as HTMLButtonElement;
+  const moveYPointPositive_original = document.getElementById("positiveY") as HTMLButtonElement;
+  const moveXPointNegative = moveXPointNegative_original.cloneNode(true) as HTMLButtonElement;
+  const moveXPointPositive = moveXPointPositive_original.cloneNode(true) as HTMLButtonElement;
+  const moveYPointNegative = moveYPointNegative_original.cloneNode(true) as HTMLButtonElement;
+  const moveYPointPositive = moveYPointPositive_original.cloneNode(true) as HTMLButtonElement;
+
+  moveXPointNegative_original.parentNode.replaceChild(moveXPointNegative, moveXPointNegative_original);
+  moveXPointPositive_original.parentNode.replaceChild(moveXPointPositive, moveXPointPositive_original);
+  moveYPointNegative_original.parentNode.replaceChild(moveYPointNegative, moveYPointNegative_original);
+  moveYPointPositive_original.parentNode.replaceChild(moveYPointPositive, moveYPointPositive_original);
+
+  if(element.type == Type.Polygon || element.type == Type.Unigon) {
+    moveXPointNegative.disabled = true;
+    moveXPointPositive.disabled = true;
+    moveYPointNegative.disabled = true;
+    moveYPointPositive.disabled = true;
+  }
+
+  moveXPointNegative.addEventListener("click", () => {
+    moveX = -10;
+    let point = new Point([element.arrayOfPoints[pointIndex].x + moveX, element.arrayOfPoints[pointIndex].y]);
+    const pointInfo = "p" + (pointIndex + 1).toString();
+    switch(element.type){
+      case Type.Line:
+        (element as Line).reDraw(point, pointInfo);
+      case Type.Square:
+        (element as Square).reDraw(point, pointInfo);
+      case Type.Rectangle:
+        (element as Rectangle).reDraw(point, pointInfo);
+    }
+    renderAll(gl, programInfo, shapes, positionBuffer, colorBuffer);
+  });
+
+  moveXPointPositive.addEventListener("click", () => {
+    moveX = 10;
+    let point = new Point([element.arrayOfPoints[pointIndex].x + moveX, element.arrayOfPoints[pointIndex].y]);
+    const pointInfo = "p" + (pointIndex + 1).toString();
+    switch(element.type){
+      case Type.Line:
+        (element as Line).reDraw(point, pointInfo);
+      case Type.Square:
+        (element as Square).reDraw(point, pointInfo);
+      case Type.Rectangle:
+        (element as Rectangle).reDraw(point, pointInfo);
+    }
+    renderAll(gl, programInfo, shapes, positionBuffer, colorBuffer);
+  });
+
+  moveYPointNegative.addEventListener("click", () => {
+    moveY = 10;
+    let point = new Point([element.arrayOfPoints[pointIndex].x, element.arrayOfPoints[pointIndex].y + moveY]);
+    console.log(point.y);
+    const pointInfo = "p" + (pointIndex + 1).toString();
+    switch(element.type){
+      case Type.Line:
+        (element as Line).reDraw(point, pointInfo);
+      case Type.Square:
+        (element as Square).reDraw(point, pointInfo);
+      case Type.Rectangle:
+        (element as Rectangle).reDraw(point, pointInfo);
+    }
+    renderAll(gl, programInfo, shapes, positionBuffer, colorBuffer);
+  });
+
+  moveYPointPositive.addEventListener("click", () => {
+    moveY = -10;
+    let point = new Point([element.arrayOfPoints[pointIndex].x, element.arrayOfPoints[pointIndex].y + moveY]);
+    console.log(point.y);
+    const pointInfo = "p" + (pointIndex + 1).toString();
+    switch(element.type){
+      case Type.Line:
+        (element as Line).reDraw(point, pointInfo);
+      case Type.Square:
+        (element as Square).reDraw(point, pointInfo);
+      case Type.Rectangle:
+        (element as Rectangle).reDraw(point, pointInfo);
+    }
+    renderAll(gl, programInfo, shapes, positionBuffer, colorBuffer);
+  });
+  
+}
+
 // loadshape from json to array of shape
 function loadShape(text: string): (Shape & Renderable & Transformable)[] {
   const shape: (Shape & Renderable & Transformable)[] = [];
   const data = JSON.parse(text);
-  const listOfShapes = document.getElementById("list-of-shapes") as HTMLSelectElement;
-  const selectionOfShapes1 = document.getElementById("selection-of-shapes1") as HTMLSelectElement;
-  const selectionOfShapes2 = document.getElementById("selection-of-shapes2") as HTMLSelectElement;
+  const listOfShapes = document.getElementById(
+    "list-of-shapes"
+  ) as HTMLSelectElement;
+  const selectionOfShapes1 = document.getElementById(
+    "selection-of-shapes1"
+  ) as HTMLSelectElement;
+  const selectionOfShapes2 = document.getElementById(
+    "selection-of-shapes2"
+  ) as HTMLSelectElement;
 
-  
   // clear the list of shapes option
-  while(listOfShapes.firstChild) {
+  while (listOfShapes.firstChild) {
     listOfShapes.removeChild(listOfShapes.firstChild);
     selectionOfShapes1.removeChild(selectionOfShapes1.firstChild);
     selectionOfShapes2.removeChild(selectionOfShapes2.firstChild);
@@ -608,7 +755,10 @@ function loadShape(text: string): (Shape & Renderable & Transformable)[] {
         shape.push(line);
         break;
       case Type.Square:
-        const square = new Square(item.id, new Point([item.center.x, item.center.y]));
+        const square = new Square(
+          item.id,
+          new Point([item.center.x, item.center.y])
+        );
         square.setSquareAttributes(
           tx,
           ty,
@@ -706,9 +856,11 @@ function handleUpload(callback: (text: string) => void): void {
   document.body.removeChild(input);
 }
 
-function union(object1 : Shape&Renderable&Transformable, object2 : Shape&Renderable&Transformable) {
+function union(
+  object1: Shape & Renderable & Transformable,
+  object2: Shape & Renderable & Transformable
+) {
   currentObject = new Unigon(shapes.length, object1.arrayOfPoints[0]);
-
 
   currentObject.arrayOfPoints = [];
   const matrix1 = Transformation.transformationMatrixWithoutProjection(
@@ -740,12 +892,12 @@ function union(object1 : Shape&Renderable&Transformable, object2 : Shape&Rendera
     const newPoint = matrix1.multiplyPoint(point);
     currentObject.arrayOfPoints.push(newPoint);
   }
-  
+
   for (const point of object2.arrayOfPoints) {
     const newPoint = matrix2.multiplyPoint(point);
     currentObject.arrayOfPoints.push(newPoint);
   }
-  
+
   (currentObject as Unigon).setUnigonAttributes(
     0,
     0,
@@ -759,6 +911,6 @@ function union(object1 : Shape&Renderable&Transformable, object2 : Shape&Rendera
   shapes.push(currentObject);
 
   setupOption(true, currentObject);
-  
+
   renderAll(gl, programInfo, shapes, positionBuffer, colorBuffer);
 }

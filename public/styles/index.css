@@ -21,26 +21,18 @@
 #selection-of-shapes1, #selection-of-shapes2 {
     margin-top: 20px;
     width: 150px;
-    margin-bottom: 15px;
 }
 
 #selection-of-shapes1 {
     margin-right: 10px;
 }
 
-h3 {
-    color: #3D405B;
-    margin-top: 20px;
-    margin-bottom: 20px;
-}
-
 .create-section{
-    margin-top: 20px;
     margin-bottom: 20px;
 }
 
-.create-section h2 {
-    margin-top: 20px;
+.create-section h3 {
+    margin-top: 10px;
 }
 
 .btn-tools {
@@ -53,15 +45,6 @@ h3 {
     margin-right: 10px;
 }
 
-#dropdown{
-    margin-bottom: 20px;
-    width: 250px;
-}
-
-.dropdown-toggle {
-    width: 30px;
-    height: 38px;
-}
 .button-section {
     display: flex;   
 }
@@ -76,7 +59,7 @@ h3 {
   }
 
   #slider-value {
-    font-size: 14px; /* Adjust font size as needed */
+    font-size: 14px; 
     margin-left: 5px;
   }
 
@@ -93,12 +76,6 @@ h3 {
     display: flex;
 }
 
-#dropdown-point{
-    margin-top: 20px;
-    margin-bottom: 20px;
-    width: 250px;
-}
-
 #colorPicker{
     margin-left: 5px;
     margin-top: 20px;
@@ -111,7 +88,6 @@ canvas {
     width:100%;
     z-index: 0;
 }
-
 
 body{
     height: 100vh;
@@ -126,5 +102,19 @@ body{
 .polygon-btn-section{
     display: flex;
     margin-top : 15px;
-    gap: 10px;
+    gap: 20px;
+}
+
+#point-button-section {
+    display: flex;
+    gap: 20px;
+    margin-top: 10px;
+}
+
+.movePoint {
+    margin-top: 10px;
+}
+
+#negativeX, #negativeY {
+    margin-right: 15px;
 }

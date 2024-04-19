@@ -17,14 +17,13 @@
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Reddit+Mono:wght@200..900&display=swap"
       rel="stylesheet"
     />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
     <title>Paint</title>
   </head>
   <body>
     <div id="root">
       <div class="left-panel">
-        <div class="title">
-          <h2>Paint</h2>
-        </div>
         <div class="create-section">
           <h3>Create Shape</h3>
           <div calss="button-section">
@@ -64,7 +63,7 @@
           <select name="" id="list-of-shapes"></select>
         </div>
 
-        <h4>Move X</h4>
+        <h5>Move X</h5>
         <input
           type="range"
           min="0"
@@ -73,7 +72,7 @@
           class="slider"
           id="sliderX"
         />
-        <h4>Move Y</h4>
+        <h5>Move Y</h5>
         <input
           type="range"
           min="0"
@@ -82,7 +81,7 @@
           class="slider"
           id="sliderY"
         />
-        <h4>Slider Length</h4>
+        <h5>Slider Length</h5>
         <input
           type="range"
           min="0"
@@ -91,7 +90,7 @@
           class="slider"
           id="sliderLength"
         />
-        <h4>Slider Width</h4>
+        <h5>Slider Width</h5>
         <input
           type="range"
           min="0"
@@ -100,7 +99,7 @@
           class="slider"
           id="sliderWidth"
         />
-        <h4>Slider Rotation</h4>
+        <h5>Slider Rotation</h5>
         <div class="slider-container">
           <input
             type="range"
@@ -112,7 +111,7 @@
           />
           <span id="slider-rotation-value">0</span>
         </div>
-        <h4>Slider Shear X</h4>
+        <h5>Slider Shear X</h5>
         <input
           type="range"
           min="0"
@@ -121,7 +120,7 @@
           class="slider"
           id="sliderShearX"
         />
-        <h4>Slider Shear Y</h4>
+        <h5>Slider Shear Y</h5>
         <input
           type="range"
           min="0"
@@ -137,8 +136,21 @@
             type="color"
             id="colorPicker"
             name="colorPicker"
-            value="#ff0000"
+            value="#000000"
           />
+        </div>
+        <div id="point-button-section">
+          <div id="buttonForX">
+            <h5>Move Point X</h5>
+            <button id="negativeX" class="btn btn-primary"><i class="fas fa-minus"></i></button>
+            <button id="positiveX" class="btn btn-primary"><i class="fas fa-plus"></i></button>
+          </div>
+
+          <div id="buttonForY">
+            <h5>Move Point Y</h5>
+            <button id="negativeY" class="btn btn-primary"><i class="fas fa-minus"></i></button>
+            <button id="positiveY" class="btn btn-primary"><i class="fas fa-plus"></i></button>
+          </div>
         </div>
 
         <div class="polygon-btn-section"></div>

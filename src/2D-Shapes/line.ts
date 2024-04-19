@@ -76,6 +76,14 @@ class Line extends Shape implements Renderable, Transformable {
         this.arrayOfPoints[1] = point;
     }
 
+    public reDraw(point: Point, info: String): void {
+        if(info === "p1") {
+            this.arrayOfPoints[0] = new Point(point.getPair(), this.arrayOfPoints[0].getColor());
+        } else {
+            this.arrayOfPoints[1] = new Point(point.getPair(), this.arrayOfPoints[1].getColor());
+        }
+    }
+
     public getNumberOfVerticesToBeDrawn(): number {
         return 2;
     } 

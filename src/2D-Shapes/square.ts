@@ -66,14 +66,6 @@ class Square extends Shape implements Renderable, Transformable {
   public draw(p1: Point): void {
     this.arrayOfPoints[0] = p1;
     const [xCenter, yCenter] = this.center.getPair();
-    // for (let i = 1; i <= 3; i++) {
-    //     const angle = (i * Math.PI) / 2;
-    //     const rotatedPoint = Transformation.translation(this.center.getX(), this.center.getY())
-    //         .multiplyMatrix(Transformation.rotation(angle))
-    //         .multiplyMatrix(Transformation.translation(-this.center.getX(), -this.center.getY()))
-    //         .multiplyPoint(p1);
-    //     this.arrayOfPoints[i] = rotatedPoint;
-    // }
 
     this.arrayOfPoints[1] = Transformation.translation(xCenter, yCenter)
       .multiplyMatrix(Transformation.rotation(0.5 * Math.PI))
@@ -89,6 +81,96 @@ class Square extends Shape implements Renderable, Transformable {
       .multiplyMatrix(Transformation.rotation(1.5 * Math.PI))
       .multiplyMatrix(Transformation.translation(-xCenter, -yCenter))
       .multiplyPoint(this.arrayOfPoints[0]);
+  }
+
+  public reDraw(point: Point, info: String): void {
+    const [xCenter, yCenter] = this.center.getPair();
+    const tempPointArr: Point[] = [null, null, null, null];
+    for (let i = 0; i < 4; i++) {
+      tempPointArr[i] = this.arrayOfPoints[i];
+    }
+    switch (info) {
+      case "p1":
+        this.arrayOfPoints[0] = point;
+
+        this.arrayOfPoints[1] = Transformation.translation(xCenter, yCenter)
+          .multiplyMatrix(Transformation.rotation(0.5 * Math.PI))
+          .multiplyMatrix(Transformation.translation(-xCenter, -yCenter))
+          .multiplyPoint(this.arrayOfPoints[0]);
+
+        this.arrayOfPoints[2] = Transformation.translation(xCenter, yCenter)
+          .multiplyMatrix(Transformation.rotation(Math.PI))
+          .multiplyMatrix(Transformation.translation(-xCenter, -yCenter))
+          .multiplyPoint(this.arrayOfPoints[0]);
+
+        this.arrayOfPoints[3] = Transformation.translation(xCenter, yCenter)
+          .multiplyMatrix(Transformation.rotation(1.5 * Math.PI))
+          .multiplyMatrix(Transformation.translation(-xCenter, -yCenter))
+          .multiplyPoint(this.arrayOfPoints[0]);
+        break;
+
+      case "p2":
+        this.arrayOfPoints[1] = point;
+
+        this.arrayOfPoints[0] = Transformation.translation(xCenter, yCenter)
+          .multiplyMatrix(Transformation.rotation(-(0.5 * Math.PI)))
+          .multiplyMatrix(Transformation.translation(-xCenter, -yCenter))
+          .multiplyPoint(this.arrayOfPoints[0]);
+
+        this.arrayOfPoints[2] = Transformation.translation(xCenter, yCenter)
+          .multiplyMatrix(Transformation.rotation(0.5 * Math.PI))
+          .multiplyMatrix(Transformation.translation(-xCenter, -yCenter))
+          .multiplyPoint(this.arrayOfPoints[0]);
+
+        this.arrayOfPoints[3] = Transformation.translation(xCenter, yCenter)
+          .multiplyMatrix(Transformation.rotation(Math.PI))
+          .multiplyMatrix(Transformation.translation(-xCenter, -yCenter))
+          .multiplyPoint(this.arrayOfPoints[0]);
+        break;
+
+      case "p3":
+        this.arrayOfPoints[2] = point;
+
+        this.arrayOfPoints[0] = Transformation.translation(xCenter, yCenter)
+          .multiplyMatrix(Transformation.rotation(-Math.PI))
+          .multiplyMatrix(Transformation.translation(-xCenter, -yCenter))
+          .multiplyPoint(this.arrayOfPoints[0]);
+
+        this.arrayOfPoints[2] = Transformation.translation(xCenter, yCenter)
+          .multiplyMatrix(Transformation.rotation(-(0.5 * Math.PI)))
+          .multiplyMatrix(Transformation.translation(-xCenter, -yCenter))
+          .multiplyPoint(this.arrayOfPoints[0]);
+
+        this.arrayOfPoints[3] = Transformation.translation(xCenter, yCenter)
+          .multiplyMatrix(Transformation.rotation(0.5 * Math.PI))
+          .multiplyMatrix(Transformation.translation(-xCenter, -yCenter))
+          .multiplyPoint(this.arrayOfPoints[0]);
+
+        break;
+
+      case "p4":
+        this.arrayOfPoints[3] = point;
+
+        this.arrayOfPoints[0] = Transformation.translation(xCenter, yCenter)
+          .multiplyMatrix(Transformation.rotation(-(1.5 * Math.PI)))
+          .multiplyMatrix(Transformation.translation(-xCenter, -yCenter))
+          .multiplyPoint(this.arrayOfPoints[0]);
+
+        this.arrayOfPoints[2] = Transformation.translation(xCenter, yCenter)
+          .multiplyMatrix(Transformation.rotation(-Math.PI))
+          .multiplyMatrix(Transformation.translation(-xCenter, -yCenter))
+          .multiplyPoint(this.arrayOfPoints[0]);
+
+        this.arrayOfPoints[3] = Transformation.translation(xCenter, yCenter)
+          .multiplyMatrix(Transformation.rotation(-(0.5 * Math.PI)))
+          .multiplyMatrix(Transformation.translation(-xCenter, -yCenter))
+          .multiplyPoint(this.arrayOfPoints[0]);
+
+        break;
+    }
+    for (let i = 0; i < 4; i++) {
+      this.arrayOfPoints[i].setColor(tempPointArr[i].getColor());
+    }
   }
 
   public getNumberOfVerticesToBeDrawn(): number {

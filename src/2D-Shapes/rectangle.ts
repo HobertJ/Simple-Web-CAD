@@ -75,6 +75,32 @@ class Rectangle extends Shape implements Renderable, Transformable {
         this.center = this.getCenter();
     }
 
+    public reDraw(point: Point, info: String): void {
+        switch(info){
+            case "p1":
+                this.arrayOfPoints[0] = new Point(point.getPair(), this.arrayOfPoints[0].getColor());
+                this.arrayOfPoints[1] = new Point([point.x, this.arrayOfPoints[1].y], this.arrayOfPoints[1].getColor());
+                this.arrayOfPoints[3] = new Point([this.arrayOfPoints[3].x, point.y], this.arrayOfPoints[3].getColor());
+                break;
+            case "p2":
+                this.arrayOfPoints[0] = new Point([point.x, this.arrayOfPoints[0].y], this.arrayOfPoints[0].getColor());
+                this.arrayOfPoints[1] = new Point(point.getPair(), this.arrayOfPoints[1].getColor());
+                this.arrayOfPoints[2] = new Point([this.arrayOfPoints[2].x, point.y], this.arrayOfPoints[2].getColor());
+                break;
+            case "p3":
+                this.arrayOfPoints[1] = new Point([this.arrayOfPoints[1].x, point.y], this.arrayOfPoints[1].getColor());
+                this.arrayOfPoints[2] = new Point(point.getPair(), this.arrayOfPoints[2].getColor());
+                this.arrayOfPoints[3] = new Point([point.x, this.arrayOfPoints[3].y], this.arrayOfPoints[3].getColor());
+                break;
+            case "p4":
+                this.arrayOfPoints[0] = new Point([this.arrayOfPoints[0].x, point.y], this.arrayOfPoints[0].getColor());
+                this.arrayOfPoints[2] = new Point([point.x, this.arrayOfPoints[2].y], this.arrayOfPoints[2].getColor());
+                this.arrayOfPoints[3] = new Point(point.getPair(), this.arrayOfPoints[3].getColor());
+                break;
+        }
+        this.center = this.getCenter();
+    }
+
     public getNumberOfVerticesToBeDrawn(): number {
         return 5;
     }
